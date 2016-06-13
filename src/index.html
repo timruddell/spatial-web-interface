@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Pinnet</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    
+    <link rel="stylesheet" href="./css/reset.css" type="text/css" />
+
+    <!-- TODO: load from react mixin - call from Map component -->
+    <link rel="stylesheet" href="./node_modules/bootstrap3/dist/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="./node_modules/openlayers/dist/ol.css" type="text/css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="./css/AdminLTE/AdminLTE.css">
+    <link rel="stylesheet" href="./css/AdminLTE/skin-blue.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="hold-transition skin-blue fixed sidebar-mini">
+
+    <!-- Site applicaiton wrapper -->
+    <div id="application-root" class="wrapper"></div>
+
+<!-- Application scripts -->
+<script src="./node_modules/react/dist/react-with-addons.js"></script>
+<script src="./node_modules/react-dom/dist/react-dom.js"></script>
+<script src="./node_modules/redux/dist/redux.js"></script>
+
+<script src="./node_modules/underscore/underscore-min.js"></script>
+<script src="./node_modules/openlayers/dist/ol-debug.js"></script>
+
+<!-- Dev server - reloads page on file change. -->
+<script src="http://localhost:8090/webpack-dev-server.js"></script>
+
+<!-- Dev webpack bundle - hosted in-memory. -->
+<script type="text/javascript" src="http://localhost:8090/js/bundle.js"></script>
+
+<!-- Misc UI -->
+<script src="./node_modules/jquery/dist/jquery.min.js"></script>
+<script src="./node_modules/bootstrap3/dist/js/bootstrap.min.js"></script>
+<script src="./node_modules/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="./node_modules/fastclick/lib/fastclick.js"></script>
+
+<!-- AdminLTE App -->
+<script src="./js/ui/AdminLTE/app.min.js"></script>
+    
+</body>
+</html>
