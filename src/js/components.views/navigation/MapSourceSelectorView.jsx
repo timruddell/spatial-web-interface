@@ -16,7 +16,9 @@ const MapSourceSelectorView = ({
     return (
 
         <li className="treeview">
-            <a href="#"><i className="fa fa-globe"></i> Base map</a>
+            <a href="#">
+                <i className="fa fa-globe"></i> Base map <i className="fa fa-angle-left pull-right"></i>
+            </a>
             <ul className="treeview-menu">
                 <li className={"treeview"}> 
                     <a href="#" style={Object.assign({}, sourceType === "osm" && styleLiActive)} onClick={ () => onInputChanged("osm") }>
