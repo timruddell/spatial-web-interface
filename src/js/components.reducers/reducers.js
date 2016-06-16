@@ -48,17 +48,37 @@ var initialProjectsState = {
             type: "project",
             description: "Project three combined plot. Area used for site testing and as a placeholder."
         }
-    ]
+    ],
+    selected: null
 }
 
 const projects = (state = initialProjectsState, action) => {
-    return state;
+    switch (action.type) {
+        case "PROJECT_SELECTION_CHANGED":
+            return Object.assign({}, state, { selected: action.value });
+        default:
+            return state;
+    }
+}
+
+var initialLayoutState = {
+    detailPaneIsOpen: false
+}
+
+const layout = (state = initialLayoutState, action) => {
+    switch (action.type) {
+        case "LAYOUT_DETAIL-PANE_SET_OPEN":
+            return Object.assign({}, state, { detailPaneIsOpen: action.value })
+        default:
+            return state;
+    }
 }
 
 // Combine all component specific reducers into a single top-level reducer function.
 var reducers = Redux.combineReducers({
     map,
-    projects
+    projects,
+    layout
 });
 
 module.exports = reducers;

@@ -24,7 +24,16 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onProjectSelected: (project) => {
-            alert ("" + project.name + " was selected!");
+            dispatch({
+                type: "PROJECT_SELECTION_CHANGED",
+                value: project
+            });
+
+            // Open the project info pane.
+            dispatch({
+                type: "LAYOUT_DETAIL-PANE_SET_OPEN",
+                value: true
+            });   
         }
     }
 }

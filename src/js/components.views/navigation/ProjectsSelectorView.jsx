@@ -1,6 +1,6 @@
 'use strict'
 
-const renderProjectGroup = (projectGroup) => {
+const renderProjectGroup = (projectGroup, onProjectSelected) => {
     return (
         <li key={projectGroup.id}>
             <a href="#">
@@ -11,8 +11,8 @@ const renderProjectGroup = (projectGroup) => {
             <ul className="treeview-menu">
                 {
                     _.map(projectGroup.children, (project) => {
-                        return project.type === "group" ? renderProjectGroup(project) : 
-                            renderProjectItem(project);
+                        return project.type === "group" ? renderProjectGroup(project, onProjectSelected) : 
+                            renderProjectItem(project, onProjectSelected);
                     })
                 }
             </ul>
@@ -20,10 +20,10 @@ const renderProjectGroup = (projectGroup) => {
     );
 }
 
-const renderProjectItem = (project) => {
+const renderProjectItem = (project, onProjectSelected) => {
     return (
-        <li key={project.id}><a href="#"><i className="fa fa-map-marker"></i> {project.name}</a></li>
-    ); 
+        <li key={project.id}><a href="#" onClick={ () => onProjectSelected(project) }><i className="fa fa-map-marker"></i> {project.name}</a></li>
+    );
 }
 
 const ProjectSelectorView = function ({
@@ -41,8 +41,8 @@ const ProjectSelectorView = function ({
             <ul className="treeview-menu">
                {
                     _.map(projects, (project) => {
-                        return project.type === "group" ? renderProjectGroup(project) : 
-                            renderProjectItem(project);
+                        return project.type === "group" ? renderProjectGroup(project, onProjectSelected) : 
+                            renderProjectItem(project, onProjectSelected);
                     })
                }
             </ul>

@@ -4,8 +4,16 @@ var Provider = require("react-redux").Provider;
 
 var Content = require("../../components.content/Content");
 var Navbar = require("../../components.navigation/Navbar");
+var DetailPane = require("../../components.navigation/DetailPane");
+
+/*
+    Currently the application uses the standard AdminLTE template. This should be shifted to use a react version of the template
+    to better manage the stateful UI.
+*/
 
 const ApplicationView = ({
+    detailPaneIsOpen,
+    toggleDetailPaneOpen,
     // Global appliation store.
     store
 }) => {
@@ -56,7 +64,7 @@ const ApplicationView = ({
                         </li>
                         { /* Control Sidebar Toggle Button */ }
                         <li>
-                            <a href="#" data-toggle="control-sidebar"><i className="fa fa-gears"></i></a>
+                            <a href="#" onClick={ toggleDetailPaneOpen }><i className="fa fa-info-circle"></i></a>
                         </li>
                         </ul>
                     </div>
@@ -73,31 +81,7 @@ const ApplicationView = ({
                     <Content />
                 </div>
 
-                { /* Control Sidebar */ }
-                <aside className="control-sidebar control-sidebar-dark">
-                    { /* Create the tabs */ }
-                    <ul className="nav nav-tabs nav-justified control-sidebar-tabs">
-                    <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i className="fa fa-home"></i></a></li>
-                    <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i className="fa fa-gears"></i></a></li>
-                    </ul>
-                    { /* Tab panes */ }
-                    <div className="tab-content">
-                    { /* Home tab content */ }
-                    <div className="tab-pane" id="control-sidebar-home-tab">
-
-                    </div>
-                    { /* Stats tab content */ }
-                    <div className="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-                    { /* Settings tab content */ }
-                    <div className="tab-pane" id="control-sidebar-settings-tab">
-                        <form method="post">
-                        <h3 className="control-sidebar-heading">General Settings</h3>
-
-                        </form>
-                    </div>
-                    </div>
-                </aside>
-
+                <DetailPane />
                 <div className="control-sidebar-bg"></div>
             </div>
         </Provider>

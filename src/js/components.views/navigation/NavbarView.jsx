@@ -1,5 +1,6 @@
 'use strict'
 
+// TODO: dependency injection for javascript? Feels strange having views manage their container deps. 
 const MapSourceSelector = require("../../components.navigation/MapSourceSelector");
 const ProjectsSelector = require("../../components.navigation/ProjectsSelector");
 
@@ -39,7 +40,7 @@ const NavbarView = () => {
                     </li>
                     <li>
                         <a href="#">
-                            <i className="fa fa-sticky-note-o"></i> <span>Notes</span>
+                            <i className="fa fa-sticky-note"></i> <span>Notes</span>
                             <small className="label pull-right bg-green"></small>
                         </a>
                     </li>
