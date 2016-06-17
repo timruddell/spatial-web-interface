@@ -24,16 +24,27 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onProjectSelected: (project) => {
-            dispatch({
-                type: "PROJECT_SELECTION_CHANGED",
-                value: project
-            });
 
-            // Open the project info pane.
+            // Hack: use animations instead of delayed dispatches. Callbacks should NOT
+            // be responsible for timing UI transitions...
+
             dispatch({
                 type: "LAYOUT_DETAIL-PANE_SET_OPEN",
-                value: true
-            });   
+                value: false
+            });
+
+            _.delay(() => {
+                dispatch({
+                    type: "PROJECT_SELECTION_CHANGED",
+                    value: project
+                });
+
+                // Open the project info pane.
+                dispatch({
+                    type: "LAYOUT_DETAIL-PANE_SET_OPEN",
+                    value: true
+                });
+            }, 300);
         }
     }
 }
