@@ -2,7 +2,7 @@
 
 const { Component } = require("react");
 const { connect } = require("react-redux");
-const restClient = require("../utilities/restClient");
+const fetchRemote = require("../utilities/restClient");
 
 var ProjectsSelectorView = require("../components.views/navigation/ProjectsSelectorView");
 
@@ -14,7 +14,7 @@ class ProjectsSelector extends Component {
     }
 
     fetchRemoteData() {
-        restClient('http://localhost:61738/api/projects').then(function (response) {
+        fetchRemote('/api/projects').then(function (response) {
             if (response.status.code === 200) {
                 // Set the project list using an action.
                 this.props.onProjectDataLoaded(response.entity);
