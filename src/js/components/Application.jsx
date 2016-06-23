@@ -14,7 +14,10 @@ class Application extends React.Component {
         var state = store.getState();
 
         return (
-            <ApplicationView detailPaneIsOpen={ state.layout.detailPaneIsOpen } toggleDetailPaneOpen={ toggleDetailPaneOpen } store={ store } />
+            <ApplicationView 
+                detailPaneIsOpen={ state.layout.detailPaneIsOpen } 
+                toggleDetailPaneOpen={ toggleDetailPaneOpen } 
+                store={ store } />
         )
     }
 }

@@ -15,45 +15,14 @@ const map = (state = initialMapState, action) => {
 }
 
 var initialProjectsState = {
-    // Dummy data for display. Will come from webservices once available.
-    items: [
-        {
-            id: 103923,
-            name: "Project one group",
-            type: "group",
-            children: [
-                {
-                    id: 23020,
-                    name: "Project one - SW plot",
-                    type: "project",
-                    description: "SW plot of Project one. Area used for site testing and as a placeholder."
-                },
-                {
-                    id: 93983,
-                    name: "Project one - East plot",
-                    type: "project",
-                    description: "E plot of Project one. Area used for site testing and as a placeholder."
-                }
-            ]
-        },
-        {
-            id: 721230,
-            name: "Project two",
-            type: "project",
-            description: "Project two combined plot. Area used for site testing and as a placeholder."
-        },
-        {
-            id: 339238,
-            name: "Project three",
-            type: "project",
-            description: "Project three combined plot. Area used for site testing and as a placeholder."
-        }
-    ],
+    items: [],
     selected: null
 }
 
 const projects = (state = initialProjectsState, action) => {
     switch (action.type) {
+        case "PROJECT_LOCAL_SET":
+            return Object.assign({}, state, { items: action.items });
         case "PROJECT_SELECTION_CHANGED":
             return Object.assign({}, state, { selected: action.value });
         default:
