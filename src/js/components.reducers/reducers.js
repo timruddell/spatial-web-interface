@@ -2,15 +2,23 @@
 
 // TODO: putting initial states here doesn't seem like a good idea. How do we initialize a state from an API call?
 var initialMapState = {
-    sourceType: "sat"
+    sourceType: "sat",
+    requiresFeatureLoad: true
 };
 
 const map = (state = initialMapState, action) => {
-    if (action.type == "MAP_CHANGE_SOURCE") {
-        return Object.assign({}, state, { sourceType: action.sourceType });
-    }
-    else {
-        return state;
+    switch (action.type) {
+        case "MAP_CHANGE_SOURCE":
+            return Object.assign({}, state, { sourceType: action.sourceType });
+
+        case "MAP_FEATURES_LOAD":
+            return Object.assign({}, state, { requiresFeatureLoad: true });
+
+        case "MAP_FEATURES_LOADED":
+            return Object.assign({}, state, { requiresFeatureLoad: false });
+
+        default:
+        	return state;
     }
 }
 

@@ -3,6 +3,7 @@
 // TODO: dependency injection for javascript? Feels strange having views manage their container deps. 
 const MapSourceSelector = require("../../components.navigation/MapSourceSelector");
 const ProjectsSelector = require("../../components.navigation/ProjectsSelector");
+const Debug = require("../../components/Debug");
 
 const NavbarView = () => {
      return (
@@ -51,6 +52,14 @@ const NavbarView = () => {
                         </a>
                         <ul className="treeview-menu">
                             <MapSourceSelector />
+                        </ul>
+                    </li>
+                    <li className="treeview">
+                        <a href="#">
+                            <i className="fa fa-bug"></i> <span>Debug</span> <i className="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul className="treeview-menu">
+                            <Debug />
                         </ul>
                     </li>
                 </ul>
