@@ -1,21 +1,44 @@
 'use strict'
 
-// TODO: putting initial states here doesn't seem like a good idea. How do we initialize a state from an API call?
+// TODO: putting initial states here doesn't seem like a good idea.
+
 var initialMapState = {
-    sourceType: "sat",
-    requiresFeatureLoad: true
-};
+    sourceType: "sat"
+}
 
 const map = (state = initialMapState, action) => {
     switch (action.type) {
         case "MAP_CHANGE_SOURCE":
             return Object.assign({}, state, { sourceType: action.sourceType });
 
-        case "MAP_FEATURES_LOAD":
-            return Object.assign({}, state, { requiresFeatureLoad: true });
+        default:
+        	return state;
+    }
+}
 
-        case "MAP_FEATURES_LOADED":
-            return Object.assign({}, state, { requiresFeatureLoad: false });
+var initialFeaturesState = {
+    sets: [],
+    loadRequired: true
+}
+
+const features = (state = initialFeaturesState, action) => {
+    switch (action.type) {
+        case "LOAD_FEATURES_REQUIRED":
+            return Object.assign({}, state, { loadRequired: true, sets: [] });
+
+        case "LOAD_FEATURES_DONE":
+            return Object.assign({}, state, { loadRequired: false, sets: action.sets });
+
+        case "TOGGLE_FEATURESET_VISIBILITY":
+            return Object.assign({}, state, {
+                sets: _.map(state.sets, (set) => {
+                    if (set.id === action.id) {
+                        return Object.assign({}, set, { visible: !set.visible });
+                    }
+
+                    return set;
+                })
+            })
 
         default:
         	return state;
@@ -54,6 +77,7 @@ const layout = (state = initialLayoutState, action) => {
 // Combine all component specific reducers into a single top-level reducer function.
 var reducers = Redux.combineReducers({
     map,
+    features,
     projects,
     layout
 });

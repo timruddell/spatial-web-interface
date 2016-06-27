@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onDebug_mapLayerRefresh: (sourceType) => {
             dispatch({
-                type: "MAP_FEATURES_LOAD"
+                type: "LOAD_FEATURES_REQUIRED"
             });
         }
     }
