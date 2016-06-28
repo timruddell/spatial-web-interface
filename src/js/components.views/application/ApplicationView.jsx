@@ -4,7 +4,7 @@ var Provider = require("react-redux").Provider;
 
 var Content = require("../../components.content/Content");
 var Navbar = require("../../components.navigation/Navbar");
-var DetailPane = require("../../components.navigation/DetailPane");
+var DetailPane = require("../../components.content/detail/DetailPane");
 
 /*
     Currently the application uses the standard AdminLTE template. This should be shifted to use a react version of the template
@@ -14,6 +14,7 @@ var DetailPane = require("../../components.navigation/DetailPane");
 const ApplicationView = ({
     detailPaneIsOpen,
     toggleDetailPaneOpen,
+    
     // Global appliation store.
     store
 }) => {

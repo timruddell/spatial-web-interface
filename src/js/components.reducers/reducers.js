@@ -3,13 +3,28 @@
 // TODO: putting initial states here doesn't seem like a good idea.
 
 var initialMapState = {
-    sourceType: "sat"
+    sourceType: "sat",
+    view: {
+        fittedExtent: null,
+        fittedFeatureSetId: null
+    }
 }
 
 const map = (state = initialMapState, action) => {
     switch (action.type) {
         case "MAP_CHANGE_SOURCE":
             return Object.assign({}, state, { sourceType: action.sourceType });
+
+        // Fitting actions nullify all other fitted values. Fitted actions are chained until they 
+        // are reduced to a fitted extent, i.e. MAP_VIEW_FIT_FEATURESET -> MAP_VIEW_FIT_EXTENT.
+        // TODO: god knows if this is the right way to do this or not..
+        case "MAP_VIEW_FIT_EXTENT":
+            return Object.assign({}, state, 
+                { view: Object.assign({}, initialMapState.view, { fittedExtent: action.value }) });
+
+        case "MAP_VIEW_FIT_FEATURESET":
+            return Object.assign({}, state, 
+                { view: Object.assign({}, initialMapState.view, { fittedFeatureSetId: action.value }) });
 
         default:
         	return state;
@@ -18,6 +33,7 @@ const map = (state = initialMapState, action) => {
 
 var initialFeaturesState = {
     sets: [],
+    selectedSet: null,
     loadRequired: true
 }
 
@@ -38,7 +54,10 @@ const features = (state = initialFeaturesState, action) => {
 
                     return set;
                 })
-            })
+            });
+
+        case "FEATURES_SET_SELECTED_SET":
+            return Object.assign({}, state, { selectedSet: action.value });
 
         default:
         	return state;

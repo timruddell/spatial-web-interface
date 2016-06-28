@@ -1,22 +1,22 @@
 'use strict'
 
-const DetailPaneView = require("../components.views/navigation/DetailPaneView");
+const DetailPaneView = require("../../components.views/content/detail/DetailPaneView");
 const { connect } = require("react-redux");
 
 const mapStateToProps = (state) => {
     return {
         isOpen: state.layout.detailPaneIsOpen,
         selectedProject: state.projects.selected,
-        featureSets: state.features.sets
+        selectedFeatureSet: state.features.selectedSet
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleFeatureSetVisible: (setId) => {
+        dismissSelectedFeatureSet: () => {
             dispatch({
-                type: "TOGGLE_FEATURESET_VISIBILITY",
-                id: setId
+                type: "FEATURES_SET_SELECTED_SET",
+                value: null
             });
         }
     }

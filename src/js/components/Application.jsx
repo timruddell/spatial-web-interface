@@ -18,7 +18,7 @@ class Application extends React.Component {
                 detailPaneIsOpen={ state.layout.detailPaneIsOpen } 
                 toggleDetailPaneOpen={ toggleDetailPaneOpen } 
                 store={ store } />
-        )
+        );
     }
 }
 

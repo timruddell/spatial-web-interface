@@ -2,25 +2,29 @@
 
 const classnames = require("classnames");
 
+const FeatureSetCollection = require("../../../components.content/detail/FeatureSetCollection");
+const FeatureSet = require("../../../components.content/detail/FeatureSet");
+
 // TODO: different types of details should be deferred to different components.
 const DetailPaneView = ({
     // Whether or not this pane should be opened
     isOpen,
-    // Assuming info is a project for now
     selectedProject,
-    featureSets,
+
+    selectedFeatureSet,
 
     // Callbacks
-    toggleFeatureSetVisible
+    dismissSelectedFeatureSet
+
 }) => {
     return (
         <aside className={classnames("control-sidebar", "control-sidebar-dark", { "control-sidebar-open": isOpen })}>
-            { !selectedProject ? <p>No content selected</p> : renderProjectInfoPane(selectedProject, featureSets, toggleFeatureSetVisible) }
+            { !selectedProject ? <p>No content selected</p> : renderProjectInfoPane(selectedProject, selectedFeatureSet, dismissSelectedFeatureSet) }
         </aside>
     );
 }
 
-const renderProjectInfoPane = (project, featureSets, toggleFeatureSetVisible) => {
+const renderProjectInfoPane = (project, selectedFeatureSet, dismissSelectedFeatureSet) => {
 
     return (
         <div>
@@ -102,32 +106,17 @@ const renderProjectInfoPane = (project, featureSets, toggleFeatureSetVisible) =>
 
             { /* Project feature sets tab content */ }
             <div className="tab-pane" id="control-sidebar-project-featuresets-tab" style={{ margin: "0 -7px 0 -7px" }}>
-            {
-                _.map(featureSets, (set) => {
-                    return (
-                        <div key={ set.id } className="info-box bg-light-blue" style={{ minHeight: "65px" }}>
-                            <span className="info-box-icon" style={{ width: "36px", height: "65px" }}>
-                                <i className="menu-icon fa fa-map-marker" style={{ fontSize: "60%", float: "left", marginLeft: "10px", marginTop: "19px" }}></i>
-                            </span>
-
-                            <div className="info-box-content" style={{ marginLeft: "36px" }}>
-                            <span className="info-box-text">{ set.name }</span>
-
-                            <div className="progress">
-                                <div className="progress-bar" style={{width: "0%"}}></div>
-                            </div>
-                                <span className="progress-description" style={{ paddingTop: "4px" }}>
-                                    {
-                                        <i onClick={ ()=> toggleFeatureSetVisible(set.id) } className={classnames("menu-icon", "fa", {"fa-eye": set.visible, "fa-eye-slash": !set.visible })} style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}></i>
-                                    }
-                                    <i className="menu-icon fa fa-pencil" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
-                                    <i className="menu-icon fa fa-download" style={{ float: "right", marginLeft: "10px", marginTop: "1px", cursor: "pointer" }}></i>
-                                </span>
-                            </div>
-                        </div>
-                    );
-                })
-            }
+                { /* Provide an alternative view when a feature set has been selected. */}
+                {
+                    !selectedFeatureSet ? '' : (
+                        <a onClick={dismissSelectedFeatureSet} href="#"><p><i className="fa fa-undo text-aqua"></i> Return to list...</p></a>
+                    )
+                }
+                {
+                    !!selectedFeatureSet ? 
+                        <FeatureSet featureSet={selectedFeatureSet} showChildFeatures={true} /> 
+                        : <FeatureSetCollection />
+                }
             </div>
 
             { /* Project data tab content */ }
