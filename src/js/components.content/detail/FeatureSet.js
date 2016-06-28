@@ -4,6 +4,12 @@ const { connect } = require("react-redux");
 
 const FeatureSetView = require("../../components.views/content/detail/FeatureSetView");
 
+const mapStateToProps = (state) => {
+    return {
+        activeSetAction: state.features.selectedSetAction
+    }
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         onSelected: (set) => {
@@ -25,10 +31,17 @@ const mapDispatchToProps = (dispatch) => {
                 type: "MAP_VIEW_FIT_FEATURESET",
                 value: setId
             });
+        },
+
+        setFeatureSetAction: (action) => {
+            dispatch({
+                type: "FEATURES_SET_FEATURESET_SELECTED_ACTION",
+                value: action
+            });
         }
     }
 }
 
-var FeatureSet = connect(null, mapDispatchToProps)(FeatureSetView);
+var FeatureSet = connect(mapStateToProps, mapDispatchToProps)(FeatureSetView);
 
 module.exports = FeatureSet;

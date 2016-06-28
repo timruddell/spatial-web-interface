@@ -4,11 +4,13 @@ const classnames = require("classnames");
 const FeatureSetView = ({
     featureSet,
     showChildFeatures,
+    activeSetAction,
 
     // Callbacks
     onSelected,
     toggleFeatureSetVisible,
-    locateFeatureSet
+    locateFeatureSet,
+    setFeatureSetAction
 }) => {
     return (
         <div>
@@ -24,8 +26,6 @@ const FeatureSetView = ({
                     <div className="progress-bar" style={{width: "0%"}}></div>
                 </div>
                     <span className="progress-description" style={{ paddingTop: "4px" }}>
-                        <i className="menu-icon fa fa-download" style={{ float: "right", marginLeft: "10px", marginTop: "1px", cursor: "pointer" }}></i>
-                        <i className="menu-icon fa fa-pencil" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
                         <i onClick={ () => locateFeatureSet(featureSet.id) } className="menu-icon fa fa-map-marker" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
                         {
                             <i onClick={ () => toggleFeatureSetVisible(featureSet.id) } className={classnames("menu-icon", "fa", {"fa-eye": featureSet.visible, "fa-eye-slash": !featureSet.visible })} style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}></i>
@@ -34,20 +34,57 @@ const FeatureSetView = ({
                 </div>
             </div>
             {
-                !showChildFeatures ? '' : (
-                    <ul className="sidebar-menu">
-                        <li className="header">FEATURES</li>
-                        {
-                            _.map(featureSet.features, (f) => {
-                                return (
-                                    <li key={ f.id }><a href="#"><i className="fa fa-circle-o text-aqua"></i> <span>{f.name}</span></a></li>
-                                )
-                            })
-                        }
-                    </ul>
-                )
+                activeSetAction === 'EDIT' ? <p style={{ fontSize: "90%" }} >Left-click to select a feature on the map, then drag the feature's edges/corners to modify</p> : ''
             }
-        
+            <div style={{ marginLeft: "-8px", marginRight: "-8px" }} >
+                {
+                    (showChildFeatures && activeSetAction === null) ? (
+                        <ul className="sidebar-menu">
+                            <li className="treeview active">
+                                <a href="#">
+                                    <i className="fa fa-bolt"></i>
+                                    <span>Actions</span>
+                                </a>
+                                <ul className="treeview-menu menu-open">
+                                    <li onClick={ () => setFeatureSetAction("EDIT") }><a href="#"><i className="fa fa-pencil-square-o"></i> <span>Add/edit features</span></a></li>
+                                    <li><a href="#"><i className="fa fa-download"></i> <span>Download feature set</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    ) : ''
+                }
+                {
+                    (showChildFeatures && activeSetAction === 'EDIT') ? (
+                        <ul className="sidebar-menu">
+                            <li className="treeview active">
+                                <a href="#">
+                                    <i className="fa fa-pencil-square-o"></i>
+                                    <span>Editing features...</span>
+                                </a>
+                                <ul className="treeview-menu menu-open">
+                                    <li><a href="#"><i className="fa fa-plus"></i> <span>Add a feature</span></a></li>
+                                    <li><a href="#"><i className="fa fa-check"></i> <span>Save changes</span></a></li>
+                                    <li><a href="#"><i className="fa fa-ban"></i> <span>Disregard changes</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    ) : ''
+                }
+                {
+                    !showChildFeatures ? '' : (
+                        <ul className="sidebar-menu">
+                            <li className="header">FEATURES</li>
+                            {
+                                _.map(featureSet.features, (f) => {
+                                    return (
+                                        <li key={ f.id }><a href="#"><i className="fa fa-circle-o text-aqua"></i> <span>{f.name}</span></a></li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    )
+                }
+            </div>
         </div>
     );
 }

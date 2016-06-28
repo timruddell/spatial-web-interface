@@ -17,7 +17,8 @@ const map = (state = initialMapState, action) => {
 
         // Fitting actions nullify all other fitted values. Fitted actions are chained until they 
         // are reduced to a fitted extent, i.e. MAP_VIEW_FIT_FEATURESET -> MAP_VIEW_FIT_EXTENT.
-        // TODO: god knows if this is the right way to do this or not..
+        // TODO: Dont' need to chain these together. Have a single selector that takes several different
+        // types of objects and resolves the extent to be fit. Have one action MAP_VIEW_FIT_ITEM.
         case "MAP_VIEW_FIT_EXTENT":
             return Object.assign({}, state, 
                 { view: Object.assign({}, initialMapState.view, { fittedExtent: action.value }) });
@@ -34,6 +35,8 @@ const map = (state = initialMapState, action) => {
 var initialFeaturesState = {
     sets: [],
     selectedSet: null,
+    selectedSetAction: null,
+
     loadRequired: true
 }
 
@@ -57,7 +60,10 @@ const features = (state = initialFeaturesState, action) => {
             });
 
         case "FEATURES_SET_SELECTED_SET":
-            return Object.assign({}, state, { selectedSet: action.value });
+            return Object.assign({}, state, { selectedSet: action.value, selectedSetAction: null });
+
+        case "FEATURES_SET_FEATURESET_SELECTED_ACTION":
+            return Object.assign({}, state, { selectedSetAction: action.value });
 
         default:
         	return state;
