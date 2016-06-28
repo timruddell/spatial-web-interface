@@ -10,7 +10,8 @@ const FeatureSetView = ({
     onSelected,
     toggleFeatureSetVisible,
     locateFeatureSet,
-    setFeatureSetAction
+    setFeatureSetAction,
+    resetFeatureSet
 }) => {
     return (
         <div>
@@ -28,13 +29,15 @@ const FeatureSetView = ({
                     <span className="progress-description" style={{ paddingTop: "4px" }}>
                         <i onClick={ () => locateFeatureSet(featureSet.id) } className="menu-icon fa fa-map-marker" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
                         {
-                            <i onClick={ () => toggleFeatureSetVisible(featureSet.id) } className={classnames("menu-icon", "fa", {"fa-eye": featureSet.visible, "fa-eye-slash": !featureSet.visible })} style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}></i>
+                            <i onClick={ () => toggleFeatureSetVisible(featureSet.id) } 
+                                className={classnames("menu-icon", "fa", {"fa-eye": featureSet.visible, "fa-eye-slash": !featureSet.visible })} 
+                                style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}></i>
                         }                                    
                     </span>
                 </div>
             </div>
             {
-                activeSetAction === 'EDIT' ? <p style={{ fontSize: "90%" }} >Left-click to select a feature on the map, then drag the feature's edges/corners to modify</p> : ''
+                activeSetAction === 'EDIT' ? <p style={{ fontSize: "90%" }} >{"Left-click to select a feature on the map, then drag the feature's edges/corners to modify"}</p> : ''
             }
             <div style={{ marginLeft: "-8px", marginRight: "-8px" }} >
                 {
@@ -64,7 +67,7 @@ const FeatureSetView = ({
                                 <ul className="treeview-menu menu-open">
                                     <li><a href="#"><i className="fa fa-plus"></i> <span>Add a feature</span></a></li>
                                     <li><a href="#"><i className="fa fa-check"></i> <span>Save changes</span></a></li>
-                                    <li><a href="#"><i className="fa fa-ban"></i> <span>Disregard changes</span></a></li>
+                                    <li onClick={ () => resetFeatureSet(featureSet.id) }><a href="#"><i className="fa fa-ban"></i> <span>Discard changes</span></a></li>
                                 </ul>
                             </li>
                         </ul>

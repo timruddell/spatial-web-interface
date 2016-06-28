@@ -1,13 +1,27 @@
 'use strict'
 
 const { connect } = require("react-redux");
+const fetchRemote = require("../../utilities/restClient");
 
 const FeatureSetView = require("../../components.views/content/detail/FeatureSetView");
+const FeatureSet = require("../../entities/FeatureSet");
 
 const mapStateToProps = (state) => {
     return {
         activeSetAction: state.features.selectedSetAction
     }
+}
+
+// Fetch and create the FeatureSet entity.
+const fetchFeatureSet = (setId, receiver) => {
+    Promise.all([
+        fetchRemote('/api/feature-sets/' + setId),
+        fetchRemote('/api/feature-sets/' + setId + '/features')
+    ]).then(
+        ([set, features]) => {
+            var featureSet = new FeatureSet(set.entity, features.entity);
+            receiver(featureSet);
+        });
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -38,10 +52,24 @@ const mapDispatchToProps = (dispatch) => {
                 type: "FEATURES_SET_FEATURESET_SELECTED_ACTION",
                 value: action
             });
+        },
+
+        resetFeatureSet: (setId) => {
+            // Fetch the set and it's features from the server to reset.
+            fetchFeatureSet(setId, (featureSet) => dispatch({
+                type: "UPDATE_FEATURE_SET",
+                value: featureSet
+            }));
+
+            // Reset the feature set action, since we shouldn't be in a actioning state.    
+            dispatch({
+                type: "FEATURES_SET_FEATURESET_SELECTED_ACTION",
+                value: null
+            });
         }
     }
 }
 
-var FeatureSet = connect(mapStateToProps, mapDispatchToProps)(FeatureSetView);
+var FeatureSetContainer = connect(mapStateToProps, mapDispatchToProps)(FeatureSetView);
 
-module.exports = FeatureSet;
+module.exports = FeatureSetContainer;

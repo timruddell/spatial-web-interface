@@ -1,6 +1,7 @@
 'use strict'
 
 // TODO: putting initial states here doesn't seem like a good idea.
+// TODO: rethink action names, and consolidate actions into separate files/functions.
 
 var initialMapState = {
     sourceType: "sat",
@@ -47,6 +48,17 @@ const features = (state = initialFeaturesState, action) => {
 
         case "LOAD_FEATURES_DONE":
             return Object.assign({}, state, { loadRequired: false, sets: action.sets });
+
+        case "UPDATE_FEATURE_SET":
+            var setIndex = _.findIndex(state.sets, (s) => s.id === action.value.id);
+
+            return Object.assign({}, state, { 
+                sets: [
+                    ...state.sets.slice(0, setIndex),
+                    action.value,
+                    ...state.sets.slice(setIndex + 1)
+                ]
+            })
 
         case "TOGGLE_FEATURESET_VISIBILITY":
             return Object.assign({}, state, {
