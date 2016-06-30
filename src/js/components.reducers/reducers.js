@@ -4,7 +4,7 @@
 // TODO: rethink action names, and consolidate actions into separate files/functions.
 
 var initialMapState = {
-    sourceType: "sat",
+    sourceType: "AerialWithLabels",
     view: {
         fittedExtent: null,
         fittedFeatureSetId: null
@@ -34,11 +34,23 @@ const map = (state = initialMapState, action) => {
 }
 
 var initialFeaturesState = {
+    // TODO: features should be stored as a single list in the state instead of against their set. Sets requiring 
+    // filetered features can resolve their own features via a selector.
+
+    //features: [],
+
     sets: [],
+
+    // TODO: this should be an ID. Actual set can be deduced from state when required.
     selectedSet: null,
     selectedSetAction: null,
 
-    loadRequired: true
+    loadRequired: true,
+
+    // TODO: this should be a property of each feature. Create and work with Feature.js entities.
+    modifiedFeatures: [],
+    // Whether or not the application requires the modified features to be persisted.
+    persistModified: false
 }
 
 const features = (state = initialFeaturesState, action) => {
@@ -58,7 +70,7 @@ const features = (state = initialFeaturesState, action) => {
                     action.value,
                     ...state.sets.slice(setIndex + 1)
                 ]
-            })
+            });
 
         case "TOGGLE_FEATURESET_VISIBILITY":
             return Object.assign({}, state, {
@@ -76,6 +88,59 @@ const features = (state = initialFeaturesState, action) => {
 
         case "FEATURES_SET_FEATURESET_SELECTED_ACTION":
             return Object.assign({}, state, { selectedSetAction: action.value });
+
+        // TODO: rewrite this reducer once the state tree is tidied up (I.e. sets/features separated).
+        case  "FEATURES_FLAG_MODIFIED_FEATURE":
+
+            // TODO: signs that your immutable state tree might not quite be optimally structured...
+
+            var newState = {};
+            // Only change state if the feature is not already flagged as being modified.
+            if (_.indexOf(state.modifiedFeatures, action.value) === -1) {
+                newState = Object.assign({}, state, {
+                    // Concatenate the new Feature ID.
+                    modifiedFeatures: [
+                        ...state.modifiedFeatures,
+                        action.value
+                    ]
+                });
+            } else {
+                newState = state;
+            }
+
+            // Update the feature state's geometry.
+            if (!!action.geometry) {
+                var set = _.find(state.sets, (s) => s.id === state.selectedSet.id);
+                var setIndex = _.findIndex(state.sets, (s) => s.id === state.selectedSet.id);
+                var featureIndex = _.findIndex(set.features, (f) => f.id === action.value);
+
+                // TODO: good example of why featuers should be stored on the state independent of their feature sets.
+                // Here we are having to modify the set as well as the feature being changed... whereas the feature change
+                // should be independent of the set.
+                return Object.assign({}, newState, { sets: [
+                    ...state.sets.slice(0, setIndex),
+                    Object.assign({}, set, { 
+                        features: [
+                            ...set.features.slice(0, featureIndex),
+                            Object.assign({}, set.features[featureIndex], { geometry: action.geometry }),
+                            ...set.features.slice(featureIndex + 1)
+                        ]}),
+                    ...state.sets.slice(setIndex + 1)
+                    ] });
+            } else {
+                return newState;
+            }
+
+        case "FEATURES_CLEAR_MODIFIED":
+            if (state.modifiedFeatures.length > 0) {
+                return Object.assign({}, state, { modifiedFeatures: [] });
+            }
+            else {
+                return state;
+            }
+
+        case "FEATURES_SET_PERSIST_MODIFIED":
+            return Object.assign({}, state, { persistModified: action.value });
 
         default:
         	return state;

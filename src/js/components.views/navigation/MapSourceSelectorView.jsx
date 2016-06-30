@@ -21,18 +21,18 @@ const MapSourceSelectorView = ({
             </a>
             <ul className="treeview-menu">
                 <li className={"treeview"}> 
-                    <a href="#" style={Object.assign({}, sourceType === "osm" && styleLiActive)} onClick={ () => onInputChanged("osm") }>
-                        <i className="fa fa-map-o"></i> Open Street Map (OSM)
+                    <a href="#" style={Object.assign({}, sourceType === "Road" && styleLiActive)} onClick={ () => onInputChanged("Road") }>
+                        <i className="fa fa-map-o"></i> Roads
                     </a>
                 </li>
                 <li className={"treeview"}>
-                    <a href="#" style={Object.assign({}, sourceType === "sat" && styleLiActive)} onClick={ () => onInputChanged("sat") }>
-                        <i className="fa fa-camera-retro"></i> Satellite
+                    <a href="#" style={Object.assign({}, sourceType === "AerialWithLabels" && styleLiActive)} onClick={ () => onInputChanged("AerialWithLabels") }>
+                        <i className="fa fa-camera-retro"></i> Aerial
                     </a>
                 </li>
                 <li className={"treeview"}>
-                    <a href="#" style={Object.assign({}, sourceType === "hyb" && styleLiActive)} onClick={ () => onInputChanged("hyb") }>
-                        <i className="fa fa-plus"></i> Hybrid
+                    <a href="#" style={Object.assign({}, sourceType === "BirdseyeWithLabels" && styleLiActive)} onClick={ () => onInputChanged("BirdseyeWithLabels") }>
+                        <i className="fa fa-plus"></i> Birdseye
                     </a>
                 </li>
             </ul>

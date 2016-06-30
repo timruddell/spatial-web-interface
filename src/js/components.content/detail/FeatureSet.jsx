@@ -6,14 +6,11 @@ const fetchRemote = require("../../utilities/restClient");
 const FeatureSetView = require("../../components.views/content/detail/FeatureSetView");
 const FeatureSet = require("../../entities/FeatureSet");
 
-const mapStateToProps = (state) => {
-    return {
-        activeSetAction: state.features.selectedSetAction
-    }
-}
+// TODO: the following two functions should be part of a class extending React.Component so
+// they can access the context store and don't need so many arguments passed.
 
 // Fetch and create the FeatureSet entity.
-const fetchFeatureSet = (setId, receiver) => {
+const restoreFeatureSet = (setId, receiver) => {
     Promise.all([
         fetchRemote('/api/feature-sets/' + setId),
         fetchRemote('/api/feature-sets/' + setId + '/features')
@@ -22,6 +19,16 @@ const fetchFeatureSet = (setId, receiver) => {
             var featureSet = new FeatureSet(set.entity, features.entity);
             receiver(featureSet);
         });
+}
+
+const persistModifiedFeatures = (modifiedFeatures) => {
+
+}
+
+const mapStateToProps = (state) => {
+    return {
+        activeSetAction: state.features.selectedSetAction
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -56,7 +63,7 @@ const mapDispatchToProps = (dispatch) => {
 
         resetFeatureSet: (setId) => {
             // Fetch the set and it's features from the server to reset.
-            fetchFeatureSet(setId, (featureSet) => dispatch({
+            restoreFeatureSet(setId, (featureSet) => dispatch({
                 type: "UPDATE_FEATURE_SET",
                 value: featureSet
             }));
@@ -66,10 +73,22 @@ const mapDispatchToProps = (dispatch) => {
                 type: "FEATURES_SET_FEATURESET_SELECTED_ACTION",
                 value: null
             });
+
+            // Clear values flagged as modified.
+            // TODO: best place to do this? Possibly in the same place that the set is fetched/added to state?
+            dispatch({
+                type: "FEATURES_CLEAR_MODIFIED"
+            });
+        },
+
+        persistModifiedFeatures: (setId) => {
+            dispatch({
+                type: "FEATURES_SET_PERSIST_MODIFIED",
+                value: true
+            });
         }
     }
 }
 
-var FeatureSetContainer = connect(mapStateToProps, mapDispatchToProps)(FeatureSetView);
-
+const FeatureSetContainer = connect(mapStateToProps, mapDispatchToProps)(FeatureSetView);
 module.exports = FeatureSetContainer;

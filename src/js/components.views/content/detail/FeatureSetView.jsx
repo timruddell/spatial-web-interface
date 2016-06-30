@@ -11,7 +11,8 @@ const FeatureSetView = ({
     toggleFeatureSetVisible,
     locateFeatureSet,
     setFeatureSetAction,
-    resetFeatureSet
+    resetFeatureSet,
+    persistModifiedFeatures
 }) => {
     return (
         <div>
@@ -66,7 +67,7 @@ const FeatureSetView = ({
                                 </a>
                                 <ul className="treeview-menu menu-open">
                                     <li><a href="#"><i className="fa fa-plus"></i> <span>Add a feature</span></a></li>
-                                    <li><a href="#"><i className="fa fa-check"></i> <span>Save changes</span></a></li>
+                                    <li onClick={ () => persistModifiedFeatures(featureSet.id) } ><a href="#"><i className="fa fa-check"></i> <span>Save changes</span></a></li>
                                     <li onClick={ () => resetFeatureSet(featureSet.id) }><a href="#"><i className="fa fa-ban"></i> <span>Discard changes</span></a></li>
                                 </ul>
                             </li>
