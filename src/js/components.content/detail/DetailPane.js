@@ -3,6 +3,8 @@
 const DetailPaneView = require("../../components.views/content/detail/DetailPaneView");
 const { connect } = require("react-redux");
 
+const featureActions = require("../../components.state/actions/featureActions");
+
 const mapStateToProps = (state) => {
     return {
         isOpen: state.layout.detailPaneIsOpen,
@@ -14,10 +16,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dismissSelectedFeatureSet: () => {
-            dispatch({
-                type: "FEATURES_SET_SELECTED_SET",
-                value: null
-            });
+            dispatch(featureActions.setSelectedFeatureSet(null));
         }
     }
 }

@@ -2,7 +2,8 @@
 
 'use strict'
 
-var MapSourceSelectorView = require("../components.views/navigation/MapSourceSelectorView");
+const MapSourceSelectorView = require("../components.views/navigation/MapSourceSelectorView");
+const mapActions = require("../components.state/actions/mapActions");
 
 const { connect } = require("react-redux");
 
@@ -14,12 +15,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onInputChanged: (sourceType) => {
-            dispatch({
-                type: "MAP_CHANGE_SOURCE",
-                sourceType: sourceType
-            });
-        }
+        onInputChanged: (sourceType) => dispatch(mapActions.changeSource(sourceType))
     }
 }
 

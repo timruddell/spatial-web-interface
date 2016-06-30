@@ -4,7 +4,10 @@ const { Component } = require("react");
 const { connect } = require("react-redux");
 const fetchRemote = require("../utilities/restClient");
 
-var ProjectsSelectorView = require("../components.views/navigation/ProjectsSelectorView");
+const ProjectsSelectorView = require("../components.views/navigation/ProjectsSelectorView");
+
+const projectActions = require("../components.state/actions/projectActions");
+const layoutActions = require("../components.state/actions/layoutActions");
 
 // Wrapper Project selector component. Provides access to lifecycle hooks for loading data.
 class ProjectsSelector extends Component {
@@ -54,31 +57,17 @@ const mapDispatchToProps = (dispatch) => {
             // Hack: use animations instead of delayed dispatches. Callbacks should NOT
             // be responsible for timing UI transitions...
 
-            dispatch({
-                type: "LAYOUT_DETAIL-PANE_SET_OPEN",
-                value: false
-            });
+            dispatch(layoutActions.closeDetailPane());
 
             _.delay(() => {
-                dispatch({
-                    type: "PROJECT_SELECTION_CHANGED",
-                    value: project
-                });
+                dispatch(projectActions.setSelectedProject(project));
 
                 // Open the project info pane.
-                dispatch({
-                    type: "LAYOUT_DETAIL-PANE_SET_OPEN",
-                    value: true
-                });
+                dispatch(layoutActions.openDetailPane());
             }, 300);
         },
 
-        onProjectDataLoaded: (items) => {
-            dispatch({
-                type: "PROJECT_LOCAL_SET",
-                items
-            })
-        }
+        onProjectDataLoaded: (items) => dispatch(projectActions.setLocalProjects(items))
     }
 }
 

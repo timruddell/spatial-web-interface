@@ -2,7 +2,8 @@
 
 // Debug component for development.
 
-var DebugListView = require("../components.views/navigation/DebugListView");
+const DebugListView = require("../components.views/navigation/DebugListView");
+const featureActions = require("../components.state/actions/featureActions");
 
 const { connect } = require("react-redux");
 
@@ -14,11 +15,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onDebug_mapLayerRefresh: (sourceType) => {
-            dispatch({
-                type: "LOAD_FEATURES_REQUIRED"
-            });
-        }
+        onDebug_mapLayerRefresh: () => dispatch(featureActions.featureLoadRequired())
     }
 }
 

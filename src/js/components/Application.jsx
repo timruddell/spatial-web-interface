@@ -1,7 +1,9 @@
 'use strict'
 
-var ApplicationView = require("../components.views/application/ApplicationView");
-var applicationReducer = require('../components.reducers/reducers');
+const ApplicationView = require("../components.views/application/ApplicationView");
+const applicationReducer = require('../components.state/reducers');
+
+const layoutActions = require("../components.state/actions/layoutActions");
 
 // Create the top-level application store for use by child components.
 var store = Redux.createStore(applicationReducer);
@@ -25,10 +27,7 @@ class Application extends React.Component {
 const toggleDetailPaneOpen = () => {
     var isOpen = store.getState().layout.detailPaneIsOpen;
 
-    store.dispatch({
-        type: "LAYOUT_DETAIL-PANE_SET_OPEN",
-        value: !isOpen
-    }); 
+    store.dispatch(layoutActions.toggleDetailPaneOpen()); 
 }
 
 module.exports = Application;
