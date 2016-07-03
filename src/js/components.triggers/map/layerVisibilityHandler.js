@@ -3,7 +3,7 @@ const { createSelector } = require("reselect");
 // Handles layer visibility from FeatureSet state.
 const buildSelector = (map) => 
     createSelector([
-        (state) => state.features.sets
+        (state) => state.features.featureSets
     ],
     
     (featureSets) => {

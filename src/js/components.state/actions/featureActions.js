@@ -12,6 +12,16 @@ const actions = {
         featureSets => featureSets
     ),
 
+    setLocalFeatures: createAction(
+        "Set the list of local Features against the state for use by the applicaiton",
+        features => features
+    ),
+
+    setLocalFeaturesForSet: createAction(
+        "Set the list of local features belonging to a particular FeatureSet",
+        (featureSetId, features) => ({ featureSetId, features })
+    ),
+
     updateFeatureSet: createAction(
         "Update a FeatureSet entity from the server",
         featureSet => featureSet

@@ -3,6 +3,8 @@ const classnames = require("classnames");
 // Detail pane tab for FeatureSet information.
 const FeatureSetView = ({
     featureSet,
+    features,
+
     showChildFeatures,
     activeSetAction,
 
@@ -22,7 +24,7 @@ const FeatureSetView = ({
                 </span>
 
                 <div className="info-box-content" style={{ marginLeft: "36px" }}>
-                <span onClick={ () => onSelected(featureSet) } className="info-box-text" style={{ cursor: "pointer" }}>{ featureSet.name + " (" + featureSet.features.length + ")"}</span>
+                <span onClick={ () => onSelected(featureSet) } className="info-box-text" style={{ cursor: "pointer" }}>{ featureSet.name + " (" + features.length + ")"}</span>
 
                 <div className="progress">
                     <div className="progress-bar" style={{width: "0%"}}></div>
@@ -33,7 +35,7 @@ const FeatureSetView = ({
                             <i onClick={ () => toggleFeatureSetVisible(featureSet.id) } 
                                 className={classnames("menu-icon", "fa", {"fa-eye": featureSet.visible, "fa-eye-slash": !featureSet.visible })} 
                                 style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}></i>
-                        }                                    
+                        }
                     </span>
                 </div>
             </div>
@@ -79,7 +81,7 @@ const FeatureSetView = ({
                         <ul className="sidebar-menu">
                             <li className="header">FEATURES</li>
                             {
-                                _.map(featureSet.features, (f) => {
+                                _.map(features, (f) => {
                                     return (
                                         <li key={ f.id }><a href="#"><i className="fa fa-circle-o text-aqua"></i> <span>{f.name}</span></a></li>
                                     )

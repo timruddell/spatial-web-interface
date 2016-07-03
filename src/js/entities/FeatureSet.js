@@ -1,8 +1,7 @@
 class FeatureSet {
-    constructor (entity = {}, features = []) {
+    constructor (entity = {}) {
         var defaults = {
-            visible: true,
-            features: features
+            visible: true
         }
 
         return _.defaults(entity, defaults);

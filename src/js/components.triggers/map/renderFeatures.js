@@ -3,10 +3,11 @@ const { createSelector } = require("reselect");
 // Renders the map features represented by the state FeatureSets.
 const buildSelector = (map) => 
     createSelector([
-        (state) => state.features.sets
+        (state) => state.features.featureSets,
+        (state) => state.features.items
     ],
     
-    (featureSets) => {
+    (featureSets, allFeatures) => {
         // Find the remote layer group.
         var remoteGroup = _.find(map.getLayers().getArray(), 
             (l) => l instanceof ol.layer.Group && l.get("source") === "remote");
@@ -25,7 +26,9 @@ const buildSelector = (map) =>
             // Attach the FeatureSet ID to the layer for later reference.
             vectorLayer.set("featureSetId", fs.id);
 
-            remoteVectorSource.addFeatures(_.map(fs.features, (f) => {
+            var setFeatures = _.filter(allFeatures, (f) => f.featureSetId === fs.id);
+
+            remoteVectorSource.addFeatures(_.map(setFeatures, (f) => {
                 var mapFeature = new ol.Feature({
                     geometry: geoJsonLoader.readGeometry(f.geometry)
                 });

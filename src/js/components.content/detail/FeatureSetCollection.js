@@ -7,7 +7,7 @@ const featureActions = require("../../components.state/actions/featureActions");
 
 const mapStateToProps = (state) => {
     return {
-        featureSets: state.features.sets
+        featureSets: state.features.featureSets
     }
 }
 

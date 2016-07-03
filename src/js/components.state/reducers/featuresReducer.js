@@ -4,12 +4,10 @@ const { createReducer } = require("redux-act");
 const a = require("../actions/featureActions");
 
 var initialState = {
-    // TODO: features should be stored as a single list in the state instead of against their set. Sets requiring 
-    // filetered features can resolve their own features via a selector.
+    // Features available to the system.
+    items: [],
 
-    //features: [],
-
-    sets: [],
+    featureSets: [],
 
     // TODO: this should be an ID. Actual set can be deduced from state when required.
     selectedSet: null,
@@ -25,25 +23,35 @@ var initialState = {
 
 
 const reducer = createReducer({
-    [a.featureLoadRequired]: (state) => Object.assign({}, state, { loadRequired: true, sets: [] }),
+    [a.featureLoadRequired]: (state) => Object.assign({}, state, { loadRequired: true, featureSets: [] }),
 
-    [a.flagFeatureLoadCompleted]: (state, featureSets) => Object.assign({}, state, { loadRequired: false, sets: featureSets }),
+    [a.flagFeatureLoadCompleted]: (state, featureSets) => Object.assign({}, state, { loadRequired: false, featureSets }),
+
+    [a.setLocalFeatures]: (state, features) => Object.assign({}, state, { items: features }),
+
+    [a.setLocalFeaturesForSet]: (state, payload) => 
+        Object.assign({}, state, { items: [
+            // Filter all items NOT in the FeatureSet
+            ..._.filter(state.items, (f) => f.featureSetId !== payload.featureSetId),
+            // Append the new features from the payload belonging to the set
+            ..._.filter(payload.features, (f) => f.featureSetId === payload.featureSetId)
+        ] }),
 
     [a.updateFeatureSet]: (state, featureSet) => {
-        var setIndex = _.findIndex(state.sets, (s) => s.id === featureSet.id);
+        var setIndex = _.findIndex(state.featureSets, (s) => s.id === featureSet.id);
 
         return Object.assign({}, state, { 
-            sets: [
-                ...state.sets.slice(0, setIndex),
+            featureSets: [
+                ...state.featureSets.slice(0, setIndex),
                 featureSet,
-                ...state.sets.slice(setIndex + 1)
+                ...state.featureSets.slice(setIndex + 1)
             ]
         });
     },
 
     [a.toggleFeatureSetVisibility]: (state, featureSetId) => {
         return Object.assign({}, state, {
-            sets: _.map(state.sets, (set) => {
+            featureSets: _.map(state.featureSets, (set) => {
                 if (set.id === featureSetId) {
                     return Object.assign({}, set, { visible: !set.visible });
                 }
@@ -59,7 +67,6 @@ const reducer = createReducer({
     [a.setFeatureSetActionState]: (state, actionState) => Object.assign({}, state, { selectedSetAction: actionState }),
 
     [a.flagFeatureAsModified]: (state, payload) => {
-        // TODO: signs that your immutable state tree might not quite be optimally structured...
 
         var newState = {};
         // Only change state if the feature is not already flagged as being modified.
@@ -76,27 +83,16 @@ const reducer = createReducer({
         }
 
         // Update the feature state's geometry.
-        if (!!payload.newGeometry) {
-            var set = _.find(state.sets, (s) => s.id === state.selectedSet.id);
-            var setIndex = _.findIndex(state.sets, (s) => s.id === state.selectedSet.id);
-            var featureIndex = _.findIndex(set.features, (f) => f.id === payload.featureId);
+        var featureIndex = _.findIndex(state.items, (f) => f.id === payload.featureId);
 
-            // TODO: good example of why featuers should be stored on the state independent of their feature sets.
-            // Here we are having to modify the set as well as the feature being changed... whereas the feature change
-            // should be independent of the set.
-            return Object.assign({}, newState, { sets: [
-                ...state.sets.slice(0, setIndex),
-                Object.assign({}, set, { 
-                    features: [
-                        ...set.features.slice(0, featureIndex),
-                        Object.assign({}, set.features[featureIndex], { geometry: payload.newGeometry }),
-                        ...set.features.slice(featureIndex + 1)
-                    ]}),
-                ...state.sets.slice(setIndex + 1)
-                ] });
-        } else {
-            return newState;
-        }
+        newState = Object.assign({}, newState, { 
+            items: [
+                ...state.items.slice(0, featureIndex),
+                Object.assign({}, state.items[featureIndex], { geometry: payload.newGeometry }),
+                ...state.items.slice(featureIndex + 1)
+            ]});
+
+        return newState;
     },
 
     [a.clearModifiedFeatures]: (state) => {
