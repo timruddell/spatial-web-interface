@@ -2,28 +2,57 @@ const { createSelector } = require("reselect");
 
 // Parses serverside styles into OpenLayers styles (pure function).
 const parseStyles = (styleString) => {
-    if (!styleString) {
-        return null;
+
+    // Provide a function that returns a style. Allows per-feature customization of styles
+    // Especially useful for labels.
+    return (mapFeature, resolution) => {
+        if (!styleString) {
+            return null;
+        }
+
+        // TODO: unsafe.
+        var styleObj = JSON.parse(styleString);
+        if (!styleObj) {
+            return null;
+        }
+
+        var fill, stroke, text;
+
+        // Fill style.
+        if (styleObj["fill"]) {
+            fill = new ol.style.Fill(styleObj.fill);
+        }
+
+        if (styleObj["stroke"]) {
+            stroke = new ol.style.Stroke(styleObj.stroke);
+        }
+
+        if (styleObj["text"]) {
+            var textStroke = {};
+            if (styleObj.text["stroke"]) {
+                textStroke = new ol.style.Stroke(styleObj.text.stroke);
+            }
+
+            var textFill = {};
+            if (styleObj.text["fill"]) {
+                textFill = new ol.style.Fill(styleObj.text.fill);
+            }
+
+            var textValue = "";
+            var mapFeatureData = mapFeature.get("data");
+            if (mapFeatureData && styleObj.text.textDataField && mapFeatureData[styleObj.text.textDataField]) {
+                textValue = mapFeatureData[styleObj.text.textDataField];
+            }
+
+            text = new ol.style.Text(Object.assign({}, styleObj.text, { 
+                stroke: textStroke, 
+                fill: textFill ,
+                text: textValue
+            }));
+        }
+
+        return new ol.style.Style({ fill, stroke, text });
     }
-
-    // TODO: unsafe.
-    var styleObj = JSON.parse(styleString);
-    if (!styleObj) {
-        return null;
-    }
-
-    var fill, stroke;
-
-    // Fill style.
-    if (styleObj["fill"]) {
-        fill = new ol.style.Fill(styleObj.fill);
-    }
-
-    if (styleObj["stroke"]) {
-        stroke = new ol.style.Stroke(styleObj.stroke);
-    }
-
-    return new ol.style.Style({ fill, stroke });
 }
 
 // Renders the map features represented by the state FeatureSets.
@@ -45,7 +74,7 @@ const buildSelector = (map) =>
         // Load GeoJSON features in 3857 format.
         var geoJsonLoader = new ol.format.GeoJSON({ defaultDataProjection: "EPSG:3857" });
 
-        _.each(featureSets, (fs) => {
+        _.each(_.sortBy(featureSets, "renderOrder"), (fs) => {
             var remoteVectorSource = new ol.source.Vector({});
             var vectorLayer = new ol.layer.Vector({ source: remoteVectorSource });
 
@@ -65,7 +94,9 @@ const buildSelector = (map) =>
                     geometry: geoJsonLoader.readGeometry(f.geometry)
                 });
 
+                // Provide the feature ID and data attributes to the map feature.
                 mapFeature.setId(f.id);
+                mapFeature.set("data", JSON.parse(f.data));
 
                 return mapFeature;
             }));

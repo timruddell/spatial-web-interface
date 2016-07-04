@@ -81,7 +81,7 @@ const FeatureSetView = ({
                         <ul className="sidebar-menu">
                             <li className="header">FEATURES</li>
                             {
-                                _.map(features, (f) => {
+                                _.map(_.sortBy(features, "name"), (f) => {
                                     return (
                                         <li key={ f.id }><a href="#"><i className="fa fa-circle-o text-aqua"></i> <span>{f.name}</span></a></li>
                                     )

@@ -45,12 +45,6 @@ const actions = {
     // TODO: redo
     clearModifiedFeatures: createAction(
         "Clears the list of Features that are flagged as modified"
-    ),
-
-    // TODO: redo
-    flagModifiedFeaturesForUpdating: createAction(
-        "Flag that a process should pick up all the modified features and save them to the server",
-        shouldPersist => shouldPersist
     )
 }
 

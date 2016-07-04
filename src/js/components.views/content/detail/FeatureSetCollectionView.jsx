@@ -9,7 +9,7 @@ const FeatureSetDetailPaneView = ({
     return (
         <ul>
         {
-            _.map(featureSets, (set) => {
+            _.map(_.sortBy(featureSets, "renderOrder").reverse(), (set) => {
                 return (
                     <li key={set.id}>
                         <FeatureSet featureSet={set} showChildFeatures={false} />

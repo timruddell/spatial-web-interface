@@ -1,9 +1,9 @@
 'use strict'
 
 // Debug component for development.
+const FeaturesManager = require("../entities/entity.features-manager");
 
 const DebugListView = require("../components.views/navigation/DebugListView");
-const featureActions = require("../components.state/actions/featureActions");
 
 const { connect } = require("react-redux");
 
@@ -14,8 +14,12 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
+
+    var featuresManager = new FeaturesManager(dispatch);
+
     return {
-        // onDebug_mapLayerRefresh: () => dispatch(featureActions.featureLoadRequired())
+        onDebug_fetchFeatureSets: () => featuresManager.fetchRemoteFeatureSets(),
+        onDebug_fetchFeatures: () => featuresManager.fetchRemoteFeatures()
     }
 }
 
