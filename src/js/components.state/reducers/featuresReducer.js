@@ -8,12 +8,8 @@ var initialState = {
     items: [],
 
     featureSets: [],
-
-    // TODO: this should be an ID. Actual set can be deduced from state when required.
-    selectedSet: null,
-    selectedSetAction: null,
-
-    loadRequired: true,
+    selectedFeatureSetId: null,
+    selectedFeatureSetAction: null,
 
     // TODO: this should be a property of each feature. Create and work with Feature.js entities.
     modifiedFeatures: []
@@ -21,9 +17,8 @@ var initialState = {
 
 
 const reducer = createReducer({
-    [a.featureLoadRequired]: (state) => Object.assign({}, state, { loadRequired: true, featureSets: [] }),
 
-    [a.flagFeatureLoadCompleted]: (state, featureSets) => Object.assign({}, state, { loadRequired: false, featureSets }),
+    [a.setLocalFeatureSets]: (state, featureSets) => Object.assign({}, state, { featureSets }),
 
     [a.setLocalFeatures]: (state, features) => Object.assign({}, state, { items: features }),
 
@@ -59,10 +54,10 @@ const reducer = createReducer({
         });
     },
 
-    [a.setSelectedFeatureSet]: (state, featureSet) => Object.assign({}, state, { selectedSet: 
-        featureSet, selectedSetAction: null }),
+    [a.setSelectedFeatureSet]: (state, featureSetId) => Object.assign({}, state, { selectedFeatureSetId: 
+        featureSetId, selectedFeatureSetAction: null }),
 
-    [a.setFeatureSetActionState]: (state, actionState) => Object.assign({}, state, { selectedSetAction: actionState }),
+    [a.setFeatureSetActionState]: (state, actionState) => Object.assign({}, state, { selectedFeatureSetAction: actionState }),
 
     [a.flagFeatureAsModified]: (state, payload) => {
 

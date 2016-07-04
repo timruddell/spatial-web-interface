@@ -1,14 +1,9 @@
 const { createAction } = require("redux-act");
 
 const actions = {
-    // TODO: redo
-    featureLoadRequired: createAction(
-        "Flag that a process should load features"
-    ),
-
-    // TODO: redo
-    flagFeatureLoadCompleted: createAction(
-        "Flag that the process has finished loading the features and has resulted in the passed sets",
+    
+    setLocalFeatureSets: createAction(
+        "Set the list of local FeatureSets against the state for use by the applicaiton",
         featureSets => featureSets
     ),
 
@@ -33,8 +28,8 @@ const actions = {
     ),
 
     setSelectedFeatureSet: createAction(
-        "Specify the newly selected FeatureSet context",
-        featureSet => featureSet
+        "Specify the newly selected FeatureSet context by ID",
+        featureSetId => featureSetId
     ),
 
     setFeatureSetActionState: createAction(

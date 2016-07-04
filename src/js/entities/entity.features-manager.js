@@ -24,7 +24,7 @@ class FeaturesManager {
             (response) => {
                 if (this._shouldDispatchActions && featureSetId === null) {
                     var sets = _.map(response.entity, (set) => new FeatureSet(set));
-                    this._dispatch(featureActions.flagFeatureLoadCompleted(sets));
+                    this._dispatch(featureActions.setLocalFeatureSets(sets));
                 }
                 else if (this._shouldDispatchActions && featureSetId !== null) {
                     var set = new FeatureSet(response.entity);

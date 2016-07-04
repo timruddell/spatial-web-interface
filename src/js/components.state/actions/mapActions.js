@@ -8,14 +8,9 @@ const actions = {
         sourceType => sourceType
     ),
 
-    fitExtentToView: createAction(
-        "Fit the passed extent to the map's primary view",
-        extent => extent
-    ),
-
-    fitFeatureSetToView: createAction(
-        "Fit the passed FeatureSet ID to the map's primary view",
-        featureSetId => featureSetId
+    fitContentToView: createAction(
+        "Fit the passed content to the map's primary view",
+        content => content
     )
 }
 

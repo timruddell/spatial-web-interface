@@ -1,8 +1,7 @@
 // Manually register all map trigger builders here.
 const triggerBuilders = [
     require("./map/changeBaseLayerSource"),
-    require("./map/fitExtent"),
-    require("./map/fitFeatureSet"),
+    require("./map/fitContent"),
     require("./map/renderFeatures"),
     require("./map/enableFeatureModification"),
     require("./map/layerVisibilityHandler")

@@ -8,17 +8,17 @@ const buildSelector = (map, dispatch) => {
         var modifyLayerInteractionSet = [];
 
         return createSelector([
-            (state) => state.features.selectedSet,
-            (state) => state.features.selectedSetAction
+            (state) => _.find(state.features.featureSets, (fs) => fs.id === state.features.selectedFeatureSetId),
+            (state) => state.features.selectedFeatureSetAction
         ],
         
-        (selectedSet, selectedSetAction) => {
+        (selectedSet, selectedFeatureSetAction) => {
             // Remove our existing set modification interactions.
             var activeInteractions = map.getInteractions();
             _.each(modifyLayerInteractionSet, (i) => activeInteractions.remove(i));
 
             // This selector is only concerned with EDIT actions.
-            if (!selectedSet || selectedSetAction !== 'EDIT') {
+            if (!selectedSet || selectedFeatureSetAction !== 'EDIT') {
                 return;
             }
 

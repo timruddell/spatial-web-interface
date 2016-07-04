@@ -15,7 +15,7 @@ const featureActions = require("../../components.state/actions/featureActions");
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        activeSetAction: state.features.selectedSetAction,
+        activeSetAction: state.features.selectedFeatureSetAction,
         features: _.filter(state.features.items, (f) => f.featureSetId === ownProps.featureSet.id),
         modifiedFeatures: state.features.modifiedFeatures
     }
@@ -26,14 +26,14 @@ const mapDispatchToProps = (dispatch) => {
         // Hack to access dispatcher in mergeProps.
         getDispatch: () => dispatch,
 
-        onSelected: (set) => dispatch(featureActions.setSelectedFeatureSet(set)),
+        onSelected: (set) => dispatch(featureActions.setSelectedFeatureSet(set.id)),
 
         toggleFeatureSetVisible: (setId) => {
             dispatch(featureActions.toggleFeatureSetVisibility(setId));
         },
 
         locateFeatureSet: (setId) => {
-            dispatch(mapActions.fitFeatureSetToView(setId));
+            dispatch(mapActions.fitContentToView(setId));
         },
 
         setFeatureSetAction: (action) => dispatch(featureActions.setFeatureSetActionState(action)),

@@ -15,7 +15,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onDebug_mapLayerRefresh: () => dispatch(featureActions.featureLoadRequired())
+        // onDebug_mapLayerRefresh: () => dispatch(featureActions.featureLoadRequired())
     }
 }
 
