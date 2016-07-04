@@ -21,7 +21,7 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         // Hack to access dispatcher in mergeProps.
         getDispatch: () => dispatch,
@@ -30,6 +30,10 @@ const mapDispatchToProps = (dispatch) => {
 
         toggleFeatureSetVisible: (setId) => {
             dispatch(featureActions.toggleFeatureSetVisibility(setId));
+        },
+
+        onToggleFeatureLabelVisible: (setId) => {
+            dispatch(featureActions.setFeatureSetLabelVisible(ownProps.featureSet.id, !ownProps.featureSet.labelsVisible));
         },
 
         locateFeatureSet: (setId) => {

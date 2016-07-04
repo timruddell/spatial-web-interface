@@ -1,17 +1,12 @@
 const { createSelector } = require("reselect");
 
 // Parses serverside styles into OpenLayers styles (pure function).
-const parseStyles = (styleString) => {
+const parseStyles = (styleObj, labelsVisible) => {
 
     // Provide a function that returns a style. Allows per-feature customization of styles
     // Especially useful for labels.
     return (mapFeature, resolution) => {
-        if (!styleString) {
-            return null;
-        }
 
-        // TODO: unsafe.
-        var styleObj = JSON.parse(styleString);
         if (!styleObj) {
             return null;
         }
@@ -27,7 +22,7 @@ const parseStyles = (styleString) => {
             stroke = new ol.style.Stroke(styleObj.stroke);
         }
 
-        if (styleObj["text"]) {
+        if (styleObj["text"] && labelsVisible) {
             var textStroke = {};
             if (styleObj.text["stroke"]) {
                 textStroke = new ol.style.Stroke(styleObj.text.stroke);
@@ -41,7 +36,10 @@ const parseStyles = (styleString) => {
             var textValue = "";
             var mapFeatureData = mapFeature.get("data");
             if (mapFeatureData && styleObj.text.textDataField && mapFeatureData[styleObj.text.textDataField]) {
-                textValue = mapFeatureData[styleObj.text.textDataField];
+                // If we're rendering above the specified maxResolution, only show the text if we're below the threshold.
+                if (!styleObj.text.maxResolution || resolution <= styleObj.text.maxResolution) {
+                    textValue = mapFeatureData[styleObj.text.textDataField];
+                }
             }
 
             text = new ol.style.Text(Object.assign({}, styleObj.text, { 
@@ -82,7 +80,7 @@ const buildSelector = (map) =>
             vectorLayer.set("featureSetId", fs.id);
 
             // Parse serverside styles and set against layer.
-            var style = parseStyles(fs.style);
+            var style = parseStyles(fs.style, fs.labelsVisible);
             if (style) {
                 vectorLayer.setStyle(style);
             }

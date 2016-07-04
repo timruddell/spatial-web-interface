@@ -27,6 +27,11 @@ const actions = {
         featureSetId => featureSetId
     ),
 
+    setFeatureSetLabelVisible: createAction(
+        "Set the visibility of the feature labels for the target FeatureSet ID",
+        (featureSetId, visible) => ({ featureSetId, visible })
+    ),
+
     setSelectedFeatureSet: createAction(
         "Specify the newly selected FeatureSet context by ID",
         featureSetId => featureSetId

@@ -54,6 +54,18 @@ const reducer = createReducer({
         });
     },
 
+    [a.setFeatureSetLabelVisible]: (state, payload) => {
+        return Object.assign({}, state, {
+            featureSets: _.map(state.featureSets, (set) => {
+                if (set.id === payload.featureSetId) {
+                    return Object.assign({}, set, { labelsVisible: payload.visible });
+                }
+
+                return set;
+            })
+        });
+    },
+
     [a.setSelectedFeatureSet]: (state, featureSetId) => Object.assign({}, state, { selectedFeatureSetId: 
         featureSetId, selectedFeatureSetAction: null }),
 

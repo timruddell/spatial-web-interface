@@ -11,6 +11,7 @@ const FeatureSetView = ({
     // Callbacks
     onSelected,
     toggleFeatureSetVisible,
+    onToggleFeatureLabelVisible,
     locateFeatureSet,
     setFeatureSetAction,
     resetFeatureSet,
@@ -54,6 +55,11 @@ const FeatureSetView = ({
                                 <ul className="treeview-menu menu-open">
                                     <li onClick={ () => setFeatureSetAction("EDIT") }><a href="#"><i className="fa fa-pencil-square-o"></i> <span>Add/edit features</span></a></li>
                                     <li><a href="#"><i className="fa fa-download"></i> <span>Download feature set</span></a></li>
+                                    {
+                                        featureSet.hasLabels 
+                                            ? <li onClick={ onToggleFeatureLabelVisible } ><a href="#"><i className="fa fa-tag"></i> <span>{featureSet.labelsVisible ? "Turn off labels" : "Turn on labels"}</span></a></li>
+                                            : ""
+                                    }
                                 </ul>
                             </li>
                         </ul>
