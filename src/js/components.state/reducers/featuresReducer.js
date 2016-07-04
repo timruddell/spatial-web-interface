@@ -16,9 +16,7 @@ var initialState = {
     loadRequired: true,
 
     // TODO: this should be a property of each feature. Create and work with Feature.js entities.
-    modifiedFeatures: [],
-    // Whether or not the application requires the modified features to be persisted.
-    persistModified: false
+    modifiedFeatures: []
 }
 
 
@@ -102,9 +100,7 @@ const reducer = createReducer({
         else {
             return state;
         }
-    },
-
-    [a.flagModifiedFeaturesForUpdating]: (state, shouldPersist) => Object.assign({}, state, { persistModified: shouldPersist })
+    }
 
 }, initialState);
 

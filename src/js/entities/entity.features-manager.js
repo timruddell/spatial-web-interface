@@ -1,8 +1,9 @@
-const fetchRemote = require("../utilities/restClient");
+const remote = require("../utilities/restClient");
 
 const FeatureSet = require("./FeatureSet");
 const featureActions = require("../components.state/actions/featureActions");
 
+// Manages interactions with remote Feature and FeatureSet entities.
 class FeaturesManager {
 
     // By passing a dispatch function to this class, all calls to fetch remote
@@ -19,7 +20,7 @@ class FeaturesManager {
             ? '/api/feature-sets'
             : '/api/feature-sets/' + featureSetId;
 
-        return fetchRemote(uri).then(
+        return remote(uri).then(
             (response) => {
                 if (this._shouldDispatchActions && featureSetId === null) {
                     var sets = _.map(response.entity, (set) => new FeatureSet(set));
@@ -39,7 +40,7 @@ class FeaturesManager {
             ? '/api/features'
             : '/api/feature-sets/' + featureSetId + '/features';
 
-        return fetchRemote(uri).then(
+        return remote(uri).then(
             (response) => {
                 if (this._shouldDispatchActions && featureSetId === null) {
                     this._dispatch(featureActions.setLocalFeatures(response.entity));
@@ -48,6 +49,37 @@ class FeaturesManager {
                     this._dispatch(featureActions.setLocalFeaturesForSet(featureSetId, response.entity));
                 }
             });
+    }
+
+    // Update the remote Feature entities to their states as passed to this function.
+    updateRemoteFeatures (features) {
+        if (features.length === 0) {
+            return;
+        }
+
+        var promises = [];
+
+        _.each(features, (f) => {
+            promises.push(remote({
+                path: '/api/features/' + f.id,
+                method: 'PUT',
+                headers:{'Content-Type': 'application/json'},
+                entity: f
+            }));
+        });
+
+        if (this._shouldDispatchActions) {
+            return Promise.all(promises).then(() => {
+                // Clear the set action.
+                this._dispatch(featureActions.setFeatureSetActionState(null));
+
+                // Clear values flagged as modified.
+                this._dispatch(featureActions.clearModifiedFeatures());
+            });
+        }
+        else {
+            return Promise.all(promises);
+        }
     }
 }
 
