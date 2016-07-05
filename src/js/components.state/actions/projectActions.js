@@ -6,10 +6,9 @@ const actions = {
         projects => projects
     ),
 
-    // TODO: should be Project ID
     setSelectedProject: createAction(
         "Set the selected Project context",
-        project => project
+        projectId => projectId
     )
 }
 

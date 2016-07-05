@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
 
         locateFeatureSet: (setId) => {
-            dispatch(mapActions.fitContentToView(setId));
+            dispatch(mapActions.fitContentToView(setId, "featureSet"));
         },
 
         setFeatureSetAction: (action) => dispatch(featureActions.setFeatureSetActionState(action)),

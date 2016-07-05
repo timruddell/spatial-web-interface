@@ -7,7 +7,8 @@ const featureActions = require("../../components.state/actions/featureActions");
 
 const mapStateToProps = (state) => {
     return {
-        featureSets: state.features.featureSets
+        // Feature sets for the currently selected Project.
+        featureSets: _.filter(state.features.featureSets, (fs) => fs.projectId === state.projects.selectedProjectId)
     }
 }
 

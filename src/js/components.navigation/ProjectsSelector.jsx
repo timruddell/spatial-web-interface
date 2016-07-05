@@ -33,20 +33,10 @@ class ProjectsSelector extends Component {
     }
 }
 
-const recursiveProjectCount = (projects) => {
-    return _.reduce(
-        projects, 
-        function (memo, project) {
-            return project.type === "group" ? 
-                recursiveProjectCount(project.children) 
-                : memo + 1 
-        }, 0);
-}
-
 const mapStateToProps = (state) => {
     return {
         projects: state.projects.items,
-        projectCount: recursiveProjectCount(state.projects.items)
+        projectCount: state.projects.items.length
     }
 }
 
@@ -60,7 +50,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(layoutActions.closeDetailPane());
 
             _.delay(() => {
-                dispatch(projectActions.setSelectedProject(project));
+                dispatch(projectActions.setSelectedProject(project.id));
 
                 // Open the project info pane.
                 dispatch(layoutActions.openDetailPane());

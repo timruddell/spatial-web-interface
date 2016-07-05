@@ -3,13 +3,13 @@ const a = require("../actions/projectActions");
 
 const initialState = {
     items: [],
-    selected: null
+    selectedProjectId: null
 }
 
 const reducer = createReducer({
     [a.setLocalProjects]: (state, projects) => Object.assign({}, state, { items: projects }),
 
-    [a.setSelectedProject]: (state, project) => Object.assign({}, state, { selected: project })
+    [a.setSelectedProject]: (state, projectId) => Object.assign({}, state, { selectedProjectId: projectId })
 
 }, initialState);
 

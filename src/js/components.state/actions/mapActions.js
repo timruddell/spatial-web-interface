@@ -10,7 +10,7 @@ const actions = {
 
     fitContentToView: createAction(
         "Fit the passed content to the map's primary view",
-        content => content
+        (content, contentType) => ({ content, contentType })
     )
 }
 
