@@ -24,8 +24,8 @@ const FeatureSetView = ({
             <div key={ featureSet.id } 
                     className={classnames("info-box", {"bg-light-blue": featureSet.isVisible, "bg-gray": !featureSet.isVisible })} 
                     style={{ minHeight: "65px" }}
-                    onMouseEnter={ () => onMouseEnterContext(featureSet.id, true) }
-                    onMouseLeave={ () => onMouseEnterContext(featureSet.id, false) }>
+                    onMouseEnter={ () => showChildFeatures ? {} : onMouseEnterContext(featureSet.id, true) }
+                    onMouseLeave={ () => showChildFeatures ? {} : onMouseEnterContext(featureSet.id, false) }>
                 <span className="info-box-icon" style={{ width: "36px", height: "65px" }}>
                     <i className="menu-icon fa fa-cubes" style={{ fontSize: "40%", float: "left", marginLeft: "7px", marginTop: "24px" }}></i>
                 </span>

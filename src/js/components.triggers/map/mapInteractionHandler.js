@@ -19,14 +19,7 @@ const buildSelector = (map, dispatch) => {
         // This function determines how to style the selected features.
         // Returning a non-null ol.style.Style overrides the default rendering style.
         style: (feature, resolution) => {
-            // Feature styles come from layers.
-            var featureSetId = feature.get("entity").featureSetId;
-
-            var layers = _.find(map.getLayers().getArray(), 
-                (l) => l instanceof ol.layer.Group && l.get("source") === "remote")
-                .getLayers().getArray();
-
-            var layer = _.find(layers, (l) => l.get("featureSetId") === featureSetId);
+            var layer = standardSelectInteraction.getLayer(feature);
             var layerStyle = layer.getStyleFunction()(feature, resolution);
 
             var stroke = layerStyle.getStroke();
@@ -42,16 +35,14 @@ const buildSelector = (map, dispatch) => {
     });
 
     standardSelectInteraction.on("select", (event) => {
-        // TODO: dispatch selection/deselection action here.
-        if (event.selected.length > 0) {
-            event.selected.forEach((f) => {
-                dispatch(featureActions.flagFeatureAsSelected(f.getId(), true));
-            });
-        }
-
+        // Do deselections first - strange behaviour when an item is selected again, it is also deleselcted.
         event.deselected.forEach((f) => {
             dispatch(featureActions.flagFeatureAsSelected(f.getId(), false));
-        })
+        });
+
+        event.selected.forEach((f) => {
+            dispatch(featureActions.flagFeatureAsSelected(f.getId(), true));
+        });
     });
 
     const defaultInteractions = ol.interaction.defaults().getArray();
@@ -64,6 +55,7 @@ const buildSelector = (map, dispatch) => {
             ]);
     }
 
+    // Create the selector trigger.
     return createSelector([
         (state) => _.find(state.features.featureSets, (fs) => fs.id === state.features.selectedFeatureSetId),
         (state) => state.features.selectedFeatureSetAction
@@ -71,8 +63,12 @@ const buildSelector = (map, dispatch) => {
     
     (selectedSet, selectedFeatureSetAction) => {
 
+        // Clear all interactions and flush the standard select with an event.
         activeInteractions.clear();
-        standardSelectInteraction.getFeatures().clear();
+        standardSelectInteraction.dispatchEvent(
+            new ol.interaction.SelectEvent({
+                deselect: standardSelectInteraction.getFeatures().getArray()
+            }));
 
         // Currently the only cause for non-standard interactions is when the selectedFeatureSetAction is non-null.
         switch (selectedFeatureSetAction) {
