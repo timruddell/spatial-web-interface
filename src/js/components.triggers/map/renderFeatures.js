@@ -78,6 +78,7 @@ const buildSelector = (map) =>
 
             // Attach the FeatureSet ID to the layer for later reference.
             vectorLayer.set("featureSetId", fs.id);
+            vectorLayer.setVisible(fs.isVisible);
 
             // Parse serverside styles and set against layer.
             var style = parseStyles(fs.style, fs.labelsVisible);

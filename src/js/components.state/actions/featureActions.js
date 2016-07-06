@@ -50,6 +50,16 @@ const actions = {
     // TODO: redo
     clearModifiedFeatures: createAction(
         "Clears the list of Features that are flagged as modified"
+    ),
+
+    flagFeatureAsSelected: createAction(
+        "Flag or unflag a feature as being selected",
+        (featureId, isSelected) => ({ featureId, isSelected })
+    ),
+
+    flagFeatureSetHover: createAction(
+        "Flag a feature set as being the context of a cursor hover",
+        (featureSetId, isHoverContext) => ({ featureSetId, isHoverContext })
     )
 }
 

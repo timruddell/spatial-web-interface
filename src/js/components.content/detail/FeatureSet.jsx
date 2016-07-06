@@ -54,7 +54,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             // Clear values flagged as modified.
             // TODO: best place to do this? Possibly in the same place that the set is fetched/added to state?
             dispatch(featureActions.clearModifiedFeatures());
-        }
+        },
+
+        onMouseEnterContext: _.debounce((setId, isEntered) => dispatch(featureActions.flagFeatureSetHover(setId, isEntered)), 50)
     }
 }
 

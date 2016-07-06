@@ -45,12 +45,12 @@ const buildSelector = (map, dispatch) => {
         // TODO: dispatch selection/deselection action here.
         if (event.selected.length > 0) {
             event.selected.forEach((f) => {
-                f.set("isSelected", true);
+                dispatch(featureActions.flagFeatureAsSelected(f.getId(), true));
             });
         }
 
         event.deselected.forEach((f) => {
-            f.set("isSelected", false);
+            dispatch(featureActions.flagFeatureAsSelected(f.getId(), false));
         })
     });
 

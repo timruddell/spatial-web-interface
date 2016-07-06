@@ -3,8 +3,7 @@ const triggerBuilders = [
     require("./map/changeBaseLayerSource"),
     require("./map/fitContent"),
     require("./map/renderFeatures"),
-    require("./map/mapInteractionHandler"),
-    require("./map/layerVisibilityHandler")
+    require("./map/mapInteractionHandler")
     
 ];
 

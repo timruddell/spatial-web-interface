@@ -15,26 +15,39 @@ const FeatureSetView = ({
     locateFeatureSet,
     setFeatureSetAction,
     resetFeatureSet,
-    persistModifiedFeatures
+    persistModifiedFeatures,
+
+    onMouseEnterContext,
 }) => {
     return (
         <div>
-            <div key={ featureSet.id } className={classnames("info-box", {"bg-light-blue": featureSet.visible, "bg-gray": !featureSet.visible })} style={{ minHeight: "65px" }}>
+            <div key={ featureSet.id } 
+                    className={classnames("info-box", {"bg-light-blue": featureSet.isVisible, "bg-gray": !featureSet.isVisible })} 
+                    style={{ minHeight: "65px" }}
+                    onMouseEnter={ () => onMouseEnterContext(featureSet.id, true) }
+                    onMouseLeave={ () => onMouseEnterContext(featureSet.id, false) }>
                 <span className="info-box-icon" style={{ width: "36px", height: "65px" }}>
-                    <i className="menu-icon fa fa-flag" style={{ fontSize: "50%", float: "left", marginLeft: "7px", marginTop: "22px" }}></i>
+                    <i className="menu-icon fa fa-cubes" style={{ fontSize: "40%", float: "left", marginLeft: "7px", marginTop: "24px" }}></i>
                 </span>
 
                 <div className="info-box-content" style={{ marginLeft: "36px" }}>
-                <span onClick={ () => onSelected(featureSet) } className="info-box-text" style={{ cursor: "pointer" }}>{ featureSet.name + " (" + features.length + ")"}</span>
+                    <span onClick={ () => onSelected(featureSet) } className="info-box-text" style={{ cursor: "pointer" }}>
+                        { featureSet.name }
+                        <span className={classnames("label", { "bg-blue": features.length > 0, "bg-gray": features.length === 0 })} 
+                            style={{ float: "right", marginTop: "3px" }}>
+                                { features.length }
+                            </span>
+                    </span>
 
-                <div className="progress">
-                    <div className="progress-bar" style={{width: "0%"}}></div>
-                </div>
-                    <span className="progress-description" style={{ paddingTop: "4px" }}>
-                        <i onClick={ () => locateFeatureSet(featureSet.id) } className="menu-icon fa fa-map-marker" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
+                    <div className="progress">
+                        <div className="progress-bar" style={{width: "0%"}}></div>
+                    </div>
+                    <span className="progress-description"
+                            style={{ display: featureSet.isHoverContext || showChildFeatures ? "inherit" : "none", paddingTop: "4px" }}>
+                        <i onClick={ () => locateFeatureSet(featureSet.id) } className="menu-icon fa fa-location-arrow" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
                         {
                             <i onClick={ () => toggleFeatureSetVisible(featureSet.id) } 
-                                className={classnames("menu-icon", "fa", {"fa-eye": featureSet.visible, "fa-eye-slash": !featureSet.visible })} 
+                                className={classnames("menu-icon", "fa", {"fa-eye": featureSet.isVisible, "fa-eye-slash": !featureSet.isVisible })} 
                                 style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}></i>
                         }
                     </span>
@@ -85,7 +98,7 @@ const FeatureSetView = ({
                             {
                                 _.map(_.sortBy(features, "name"), (f) => {
                                     return (
-                                        <li key={ f.id }><a href="#"><i className="fa fa-circle-o text-aqua"></i> <span>{f.name}</span></a></li>
+                                        <li key={ f.id } className={ f.isSelected ? "active" : "" }><a href="#"><i className="fa fa-map-marker text-aqua"></i> <span>{f.name}</span></a></li>
                                     )
                                 })
                             }

@@ -46,7 +46,7 @@ const reducer = createReducer({
         return Object.assign({}, state, {
             featureSets: _.map(state.featureSets, (set) => {
                 if (set.id === featureSetId) {
-                    return Object.assign({}, set, { visible: !set.visible });
+                    return Object.assign({}, set, { isVisible: !set.isVisible });
                 }
 
                 return set;
@@ -107,6 +107,26 @@ const reducer = createReducer({
         else {
             return state;
         }
+    },
+
+    [a.flagFeatureAsSelected]: (state, payload) => {
+        var featureIndex = _.findIndex(state.items, (f) => f.id === payload.featureId)
+
+        return Object.assign({}, state, { items: [
+            ...state.items.slice(0, featureIndex),
+            Object.assign({}, state.items[featureIndex], { isSelected: payload.isSelected }),
+            ...state.items.slice(featureIndex + 1)
+        ] });
+    },
+
+    [a.flagFeatureSetHover]: (state, payload) => {
+        var featureSetIndex = _.findIndex(state.featureSets, (fs) => fs.id === payload.featureSetId)
+
+        return Object.assign({}, state, { featureSets: [
+            ...state.featureSets.slice(0, featureSetIndex),
+            Object.assign({}, state.featureSets[featureSetIndex], { isHoverContext: payload.isHoverContext }),
+            ...state.featureSets.slice(featureSetIndex + 1)
+        ] });
     }
 
 }, initialState);

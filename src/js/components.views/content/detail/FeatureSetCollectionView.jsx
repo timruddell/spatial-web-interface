@@ -7,6 +7,8 @@ const FeatureSetDetailPaneView = ({
     featureSets
 }) => {
     return (
+        <div>
+        <h4 style={{ marginBottom: "20px" }}>Feature sets</h4>
         <ul>
         {
             _.map(_.sortBy(featureSets, "renderOrder").reverse(), (set) => {
@@ -18,6 +20,7 @@ const FeatureSetDetailPaneView = ({
             })
         }
         </ul>
+        </div>
     );
 }
 

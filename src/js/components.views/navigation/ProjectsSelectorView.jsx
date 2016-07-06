@@ -21,7 +21,7 @@ const renderProjectItem = (project, onProjectSelected) => {
     return (
         <li key={project.id}>
             <a href="#" onClick={ () => onProjectSelected(project) }>
-                <i className="fa fa-map-marker"></i> 
+                <i className="fa fa-leaf"></i> 
                 {project.name}
             </a>
         </li>
@@ -66,7 +66,7 @@ const ProjectSelectorView = function ({
     return (
         <li className="treeview">
             <a href="#">
-                <i className="fa fa-clipboard"></i>
+                <i className="fa fa-flag"></i>
                 <span>Projects</span>
                 <span className="label label-primary pull-right">{projectCount}</span>
             </a>

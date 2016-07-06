@@ -9,8 +9,11 @@ class FeatureSetEntity {
             // Whether or not this set has associated label styles.
             hasLabels: !!overrides.style && !!overrides.style.text,
             
-            visible: true,
-            labelsVisible: true
+            isVisible: true,
+            labelsVisible: true,
+
+            // Is the cursor currently hovered over this context
+            isHoverContext: false
         }
 
         return Object.assign({}, entity, overrides, extensions);

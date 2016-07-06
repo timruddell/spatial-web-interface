@@ -33,17 +33,17 @@ const DetailPaneView = ({
             <ul className="nav nav-tabs nav-justified control-sidebar-tabs">
                 <li className="active">
                     <a href="#control-sidebar-project-info-tab" data-toggle="tab">
-                        <i className="fa fa-info"></i>
+                        <i className="fa fa-flag"></i>
                     </a>
                 </li>
                 <li>
                     <a href="#control-sidebar-project-featuresets-tab" data-toggle="tab">
-                        <i className="fa fa-map-marker"></i>
+                        <i className="fa fa-cubes"></i>
                     </a>
                 </li>
                 <li>
                     <a href="#control-sidebar-project-data-tab" data-toggle="tab">
-                        <i className="fa fa-table"></i>
+                        <i className="fa fa-map-marker"></i>
                     </a>
                 </li>
                 <li>
@@ -63,7 +63,7 @@ const DetailPaneView = ({
                         <ul className="sidebar-menu">
                             <li className="treeview active">
                                 <ul className="treeview-menu menu-open">
-                                    <li onClick={ () => onLocateProject(selectedProject.id) }><a href="#"><i className="fa fa-map-marker"></i> <span>Locate project</span></a></li>
+                                    <li onClick={ () => onLocateProject(selectedProject.id) }><a href="#"><i className="fa fa-location-arrow"></i> <span>Locate project</span></a></li>
                                 </ul>
                             </li>
                         </ul>
