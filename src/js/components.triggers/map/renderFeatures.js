@@ -34,7 +34,7 @@ const parseStyles = (styleObj, labelsVisible) => {
             }
 
             var textValue = "";
-            var mapFeatureData = mapFeature.get("data");
+            var mapFeatureData = mapFeature.get("entity").data;
             if (mapFeatureData && styleObj.text.textDataField && mapFeatureData[styleObj.text.textDataField]) {
                 // If we're rendering above the specified maxResolution, only show the text if we're below the threshold.
                 if (!styleObj.text.maxResolution || resolution <= styleObj.text.maxResolution) {
@@ -94,7 +94,7 @@ const buildSelector = (map) =>
 
                 // Provide the feature ID and data attributes to the map feature.
                 mapFeature.setId(f.id);
-                mapFeature.set("data", JSON.parse(f.data));
+                mapFeature.set("entity", f);
 
                 return mapFeature;
             }));

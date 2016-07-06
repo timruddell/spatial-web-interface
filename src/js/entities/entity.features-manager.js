@@ -1,6 +1,8 @@
 const remote = require("../utilities/restClient");
 
-const FeatureSet = require("./FeatureSet");
+const FeatureSetEntity = require("./entity.feature-set");
+const FeatureEntity = require("./entity.feature");
+
 const featureActions = require("../components.state/actions/featureActions");
 
 // Manages interactions with remote Feature and FeatureSet entities.
@@ -23,11 +25,11 @@ class FeaturesManager {
         return remote(uri).then(
             (response) => {
                 if (this._shouldDispatchActions && featureSetId === null) {
-                    var sets = _.map(response.entity, (set) => new FeatureSet(set));
+                    var sets = _.map(response.entity, (set) => new FeatureSetEntity(set));
                     this._dispatch(featureActions.setLocalFeatureSets(sets));
                 }
                 else if (this._shouldDispatchActions && featureSetId !== null) {
-                    var set = new FeatureSet(response.entity);
+                    var set = new FeatureSetEntity(response.entity);
                     this._dispatch(featureActions.updateFeatureSet(set));
                 }
             });
@@ -42,11 +44,15 @@ class FeaturesManager {
 
         return remote(uri).then(
             (response) => {
-                if (this._shouldDispatchActions && featureSetId === null) {
-                    this._dispatch(featureActions.setLocalFeatures(response.entity));
-                }
-                else if (this._shouldDispatchActions && featureSetId !== null) {
-                    this._dispatch(featureActions.setLocalFeaturesForSet(featureSetId, response.entity));
+                if (this._shouldDispatchActions) {
+                    var featureEntities = _.map(response.entity, (f) => new FeatureEntity(f));
+
+                    if(featureSetId === null) {
+                        this._dispatch(featureActions.setLocalFeatures(featureEntities));
+                    }
+                    else {
+                        this._dispatch(featureActions.setLocalFeaturesForSet(featureSetId, featureEntities));
+                    }
                 }
             });
     }

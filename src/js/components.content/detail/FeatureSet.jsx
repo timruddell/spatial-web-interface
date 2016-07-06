@@ -7,7 +7,6 @@ const fetchRemote = require("../../utilities/restClient");
 const FeatureSetView = require("../../components.views/content/detail/FeatureSetView");
 
 const FeaturesManager = require("../../entities/entity.features-manager");
-const FeatureSet = require("../../entities/FeatureSet");
 
 const mapActions = require("../../components.state/actions/mapActions");
 const featureActions = require("../../components.state/actions/featureActions");

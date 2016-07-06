@@ -48,10 +48,6 @@ const FeatureSetView = ({
                     (showChildFeatures && activeSetAction === null) ? (
                         <ul className="sidebar-menu">
                             <li className="treeview active">
-                                <a href="#">
-                                    <i className="fa fa-bolt"></i>
-                                    <span>Actions</span>
-                                </a>
                                 <ul className="treeview-menu menu-open">
                                     <li onClick={ () => setFeatureSetAction("EDIT") }><a href="#"><i className="fa fa-pencil-square-o"></i> <span>Add/edit features</span></a></li>
                                     <li><a href="#"><i className="fa fa-download"></i> <span>Download feature set</span></a></li>

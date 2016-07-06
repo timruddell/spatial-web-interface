@@ -1,5 +1,7 @@
 const { createSelector } = require("reselect");
 
+const mapActions = require("../../components.state/actions/mapActions");
+
 const contentTypes = {
     extent: "extent",
     featureSet: "featureSet",
@@ -8,7 +10,7 @@ const contentTypes = {
 
 // Fits the state's fitted content to the map view.
 // Currently support an ol.extent, or a FeatureSet ID as content.
-const buildSelector = (map) => 
+const buildSelector = (map, dispatch) => 
     createSelector([
         (state) => state.map.view.fittedContent,
         (state) => state.map.view.fittedContentType,
@@ -43,6 +45,10 @@ const buildSelector = (map) =>
                     
                     // TODO: calculate padding based on device metrics (i.e. percentage).
                     view.fit(content, map.getSize(), { padding: [60, 60, 60, 60]});
+
+                    // Once the extent is fitted, clear the state so the same item can be fitted again. (Hack).
+                    dispatch(mapActions.fitContentToView(null, null));
+
                     return;
 
                 case contentTypes.featureSet:

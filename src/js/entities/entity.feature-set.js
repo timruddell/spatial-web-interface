@@ -1,4 +1,4 @@
-class FeatureSet {
+class FeatureSetEntity {
     constructor (entity = {}) {
         var overrides = {
             // Parse the string style into an object.
@@ -17,4 +17,4 @@ class FeatureSet {
     }
 }
 
-module.exports = FeatureSet;
+module.exports = FeatureSetEntity;

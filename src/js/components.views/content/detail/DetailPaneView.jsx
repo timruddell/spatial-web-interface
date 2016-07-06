@@ -59,13 +59,9 @@ const DetailPaneView = ({
                 <div className="tab-pane active" id="control-sidebar-project-info-tab">
                     <h1 style={{ fontSize: "20px" }} className="control-sidebar-heading">{ selectedProject.name }</h1>
                     <p>{ selectedProject.description }</p>
-                    <div style={{ margin: "15px -15px 15px -15px" }} >
+                    <div style={{ margin: "25px -15px 10px -15px" }} >
                         <ul className="sidebar-menu">
                             <li className="treeview active">
-                                <a href="#">
-                                    <i className="fa fa-bolt"></i>
-                                    <span>Actions</span>
-                                </a>
                                 <ul className="treeview-menu menu-open">
                                     <li onClick={ () => onLocateProject(selectedProject.id) }><a href="#"><i className="fa fa-map-marker"></i> <span>Locate project</span></a></li>
                                 </ul>
