@@ -1,6 +1,8 @@
 'use strict'
 
-const renderProjectGroupItem = (projectGroupName, projects, onProjectSelected) => {
+const classnames = require("classnames");
+
+const renderProjectGroupItem = (projectGroupName, projects, selectedProjectId, onProjectSelected) => {
     return (
         <li key={projectGroupName}>
             <a href="#">
@@ -10,16 +12,16 @@ const renderProjectGroupItem = (projectGroupName, projects, onProjectSelected) =
             </a>
             <ul className="treeview-menu">
                 {
-                    _.map(projects, (project) => renderProjectItem(project, onProjectSelected))
+                    _.map(projects, (project) => renderProjectItem(project, selectedProjectId, onProjectSelected))
                 }
             </ul>
         </li>
     );
 }
 
-const renderProjectItem = (project, onProjectSelected) => {
+const renderProjectItem = (project, selectedProjectId, onProjectSelected) => {
     return (
-        <li key={project.id}>
+        <li key={project.id} className={ classnames({ active: project.id === selectedProjectId }) }>
             <a href="#" onClick={ () => onProjectSelected(project) }>
                 <i className="fa fa-leaf"></i> 
                 {project.name}
@@ -29,7 +31,7 @@ const renderProjectItem = (project, onProjectSelected) => {
 }
 
 // Currently only handles one level of grouping.
-const renderProjectList = (projects, onProjectSelected) => {
+const renderProjectList = (projects, selectedProjectId, onProjectSelected) => {
     if (!projects || projects.length === 0) {
         return;
     }
@@ -46,13 +48,13 @@ const renderProjectList = (projects, onProjectSelected) => {
     // Render groups first.
     var elements = _.map(projectGroups, (projectGroup) => {
         return renderProjectGroupItem(projectGroup, 
-            _.filter(sortedProjects, (project) => project.projectGroupId === projectGroup), onProjectSelected)
+            _.filter(sortedProjects, (project) => project.projectGroupId === projectGroup), selectedProjectId, onProjectSelected)
     });
 
     // Render non-grouped projects.
     _.chain(sortedProjects)
         .where({ projectGroupId: null })
-        .each((project) => elements.push(renderProjectItem(project, onProjectSelected)))
+        .each((project) => elements.push(renderProjectItem(project, selectedProjectId, onProjectSelected)))
         .value();
 
     return elements;
@@ -60,6 +62,7 @@ const renderProjectList = (projects, onProjectSelected) => {
 
 const ProjectSelectorView = function ({
     projects,
+    selectedProjectId,
     projectCount,
     onProjectSelected
 }) {
@@ -72,7 +75,7 @@ const ProjectSelectorView = function ({
             </a>
             <ul className="treeview-menu">
                {
-                   renderProjectList(projects, onProjectSelected)
+                   renderProjectList(projects, selectedProjectId, onProjectSelected)
                }
             </ul>
         </li>

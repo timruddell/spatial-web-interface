@@ -26,6 +26,16 @@ class ProjectsSelector extends Component {
                 console.error("Error loading project information: Status code " + response.status.code)
             }
         }.bind(this));
+
+        // TODO: move to own component.
+        fetchRemote('/api/ownerships').then(function (response) {
+            if (response.status.code === 200) {
+                this.props.onOwnershipDataLoaded(response.entity);
+            }
+            else {
+                console.error("Error loading ownership information: Status code " + response.status.code)
+            }
+        }.bind(this));
     }
 
     render() {
@@ -36,6 +46,7 @@ class ProjectsSelector extends Component {
 const mapStateToProps = (state) => {
     return {
         projects: state.projects.items,
+        selectedProjectId: state.projects.selectedProjectId,
         projectCount: state.projects.items.length
     }
 }
@@ -58,7 +69,8 @@ const mapDispatchToProps = (dispatch) => {
             }, 300);
         },
 
-        onProjectDataLoaded: (items) => dispatch(projectActions.setLocalProjects(items))
+        onProjectDataLoaded: (items) => dispatch(projectActions.setLocalProjects(items)),
+        onOwnershipDataLoaded: (items) => dispatch(projectActions.setLocalOwnerships(items))
     }
 }
 

@@ -12,6 +12,7 @@ const DetailPaneView = ({
     isOpen,
     activeTab,
     selectedProject,
+    selectedProjectOwnership,
 
     selectedFeatureSet,
     selectedFeature,
@@ -56,6 +57,9 @@ const DetailPaneView = ({
             <div className="tab-content" style={{ padding: "10px 15px" }}>
                 { /* Project info tab content */ }
                 <div className={ classnames("tab-pane", { active: activeTab === "project" }) } id="control-sidebar-project-info-tab">
+                {
+                    selectedProjectOwnership ? <img style={{ width: "100%" }} src={ selectedProjectOwnership.logo } /> : ''
+                }
                     <h1 style={{ fontSize: "20px" }} className="control-sidebar-heading">{ selectedProject.name }</h1>
                     <p>{ selectedProject.description }</p>
                     <div style={{ margin: "25px -15px 10px -15px" }} >

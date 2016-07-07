@@ -1,4 +1,5 @@
 // Manually register all map trigger builders here.
+// Triggers need to be ordered appropriately.
 const triggerBuilders = [
     require("./map/changeBaseLayerSource"),
     require("./map/fitContent"),
