@@ -10,6 +10,7 @@ const FeatureContainer = require("../../../components.content/detail/Feature");
 const DetailPaneView = ({
     // Whether or not this pane should be opened
     isOpen,
+    activeTab,
     selectedProject,
 
     selectedFeatureSet,
@@ -17,7 +18,8 @@ const DetailPaneView = ({
 
     // Callbacks
     dismissSelectedFeatureSet,
-    onLocateProject
+    onLocateProject,
+    onTabSelected
 
 }) => {
     // Render the outer container based on visibility flags.
@@ -33,24 +35,19 @@ const DetailPaneView = ({
             <div>
             { /* Tab list for top of pane view */ }
             <ul className="nav nav-tabs nav-justified control-sidebar-tabs">
-                <li className="active">
-                    <a href="#control-sidebar-project-info-tab" data-toggle="tab">
+                <li className={ activeTab === "project" ? "active" : "" } >
+                    <a href="#control-sidebar-project-info-tab" onClick={ () => onTabSelected("project") } data-toggle="tab">
                         <i className="fa fa-flag"></i>
                     </a>
                 </li>
-                <li>
-                    <a href="#control-sidebar-project-featuresets-tab" data-toggle="tab">
+                <li className={ activeTab === "featureSet" ? "active" : "" } >
+                    <a href="#control-sidebar-project-featuresets-tab" onClick={ () => onTabSelected("featureSet") } data-toggle="tab">
                         <i className="fa fa-cubes"></i>
                     </a>
                 </li>
-                <li>
-                    <a href="#control-sidebar-project-data-tab" data-toggle="tab">
+                <li className={ activeTab === "feature" ? "active" : "" } >
+                    <a href="#control-sidebar-project-data-tab" onClick={ () => onTabSelected("feature") } data-toggle="tab">
                         <i className="fa fa-map-marker"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#control-sidebar-project-attachments-tab" data-toggle="tab">
-                        <i className="fa fa-paperclip"></i>
                     </a>
                 </li>
             </ul>
@@ -58,7 +55,7 @@ const DetailPaneView = ({
             { /* Tab content panes. TODO: style properly. */ }
             <div className="tab-content" style={{ padding: "10px 15px" }}>
                 { /* Project info tab content */ }
-                <div className="tab-pane active" id="control-sidebar-project-info-tab">
+                <div className={ classnames("tab-pane", { active: activeTab === "project" }) } id="control-sidebar-project-info-tab">
                     <h1 style={{ fontSize: "20px" }} className="control-sidebar-heading">{ selectedProject.name }</h1>
                     <p>{ selectedProject.description }</p>
                     <div style={{ margin: "25px -15px 10px -15px" }} >
@@ -104,7 +101,7 @@ const DetailPaneView = ({
                 </div>
 
                 { /* Project feature sets tab content */ }
-                <div className="tab-pane" id="control-sidebar-project-featuresets-tab" style={{ margin: "0 -7px 0 -7px" }}>
+                <div className={ classnames("tab-pane", { active: activeTab === "featureSet" }) } id="control-sidebar-project-featuresets-tab" style={{ margin: "0 -7px 0 -7px" }}>
                     { /* Provide an alternative view when a feature set has been selected. */}
                     {
                         !selectedFeatureSet ? '' : (
@@ -119,16 +116,12 @@ const DetailPaneView = ({
                 </div>
 
                 { /* Feature data tab content */ }
-                <div className="tab-pane" id="control-sidebar-project-data-tab" style={{ margin: "0 -8px 0 -8px" }}>
+                <div className={ classnames("tab-pane", { active: activeTab === "feature" }) } id="control-sidebar-project-data-tab" style={{ margin: "0 -8px 0 -8px" }}>
                 {
                     selectedFeature 
                         ? <FeatureContainer entity={ selectedFeature } showDetail={ true } />
                         : <p>Select a feature on the map to populate this view</p>
                 }
-                </div>
-
-                { /* Project notes tab content */ }
-                <div className="tab-pane" id="control-sidebar-project-attachments-tab">
                 </div>
             </div>
             </div>

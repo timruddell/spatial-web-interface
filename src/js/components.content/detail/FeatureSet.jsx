@@ -7,6 +7,7 @@ const FeatureSetView = require("../../components.views/content/detail/FeatureSet
 
 const mapActions = require("../../components.state/actions/mapActions");
 const featureActions = require("../../components.state/actions/featureActions");
+const layoutActions = require("../../components.state/actions/layoutActions");
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -19,9 +20,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onSelected: (set) => dispatch(featureActions.setSelectedFeatureSet(set.id)),
         onFeatureSelected: (featureId) => {
-            // TODO: combine these two? Could have a flag to optionally clear.
             dispatch(featureActions.clearFeatureSelectedFlags());
             dispatch(featureActions.flagFeatureAsSelected(featureId, true));
+        },
+
+        // When the user selects a feature that is already selected.
+        onFeatureContext: () => {
+            dispatch(layoutActions.setActiveDetailTab("feature"));
         },
 
         toggleFeatureSetVisible: (setId) => {

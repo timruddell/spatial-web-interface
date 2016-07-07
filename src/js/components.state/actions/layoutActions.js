@@ -11,6 +11,11 @@ const actions = {
 
     toggleDetailPaneOpen: createAction(
         "Toggles the openness of the page contnet detail pane"
+    ),
+
+    setActiveDetailTab: createAction(
+        "Set the active detail tab",
+        tab => tab
     )
 }
 

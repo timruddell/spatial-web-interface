@@ -2,6 +2,7 @@
 
 const { createSelector } = require("reselect");
 const featureActions = require("../../components.state/actions/featureActions");
+const layoutActions = require("../../components.state/actions/layoutActions");
 
 // Handles flushing selection interactions to the application state.
 // Avoids rendering or changing feature styles (handled by another trigger from state).
@@ -19,6 +20,7 @@ const buildSelector = (map, dispatch) => {
             // Set a blank style.
             feature.setStyle([]);
             dispatch(featureActions.flagFeatureAsSelected(feature.getId(), true));
+            dispatch(layoutActions.setActiveDetailTab("feature"));
         }
     });
 

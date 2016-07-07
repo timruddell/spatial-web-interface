@@ -6,6 +6,7 @@ const FeatureDetailView = require("../../components.views/content/detail/view.fe
 
 const mapActions = require("../../components.state/actions/mapActions");
 const featureActions = require("../../components.state/actions/featureActions");
+const layoutActions = require("../../components.state/actions/layoutActions");
 
 // Requires 'entity' prop as an entity.feature instance.
 const mapStateToProps = (state, ownProps) => {
@@ -18,7 +19,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onLocateFeature: () => dispatch(mapActions.fitContentToView(ownProps.entity.id, "feature")),
-        onSelectFeatureSet: () => dispatch(featureActions.setSelectedFeatureSet(ownProps.entity.featureSetId)),
+        onSelectFeatureSet: () => {
+            dispatch(featureActions.setSelectedFeatureSet(ownProps.entity.featureSetId));
+            dispatch(layoutActions.setActiveDetailTab("featureSet"));
+        },
         onEditFeature: () => dispatch(featureActions.flagIsEditingFeature(true)),
 
         onDiscardEdits: () => {

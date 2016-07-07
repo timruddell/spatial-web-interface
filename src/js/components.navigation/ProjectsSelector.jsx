@@ -48,8 +48,9 @@ const mapDispatchToProps = (dispatch) => {
             // be responsible for timing UI transitions...
 
             dispatch(layoutActions.closeDetailPane());
-
+            
             _.delay(() => {
+                dispatch(layoutActions.setActiveDetailTab("project"));
                 dispatch(projectActions.setSelectedProject(project.id));
 
                 // Open the project info pane.
