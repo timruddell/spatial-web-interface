@@ -1,12 +1,9 @@
 'use strict'
 
 const { connect } = require("react-redux");
-const { createSelector } = require("reselect");
 
 const fetchRemote = require("../../utilities/restClient");
 const FeatureSetView = require("../../components.views/content/detail/FeatureSetView");
-
-const FeaturesManager = require("../../entities/entity.features-manager");
 
 const mapActions = require("../../components.state/actions/mapActions");
 const featureActions = require("../../components.state/actions/featureActions");
@@ -14,7 +11,6 @@ const featureActions = require("../../components.state/actions/featureActions");
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        activeSetAction: state.features.selectedFeatureSetAction,
         features: _.filter(state.features.items, (f) => f.featureSetId === ownProps.featureSet.id),
         modifiedFeatures: state.features.modifiedFeatures
     }
@@ -35,26 +31,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(featureActions.setFeatureSetLabelVisible(ownProps.featureSet.id, !ownProps.featureSet.labelsVisible));
         },
 
-        locateFeatureSet: (setId) => {
+        onLocateFeatureSet: (setId) => {
             dispatch(mapActions.fitContentToView(setId, "featureSet"));
         },
 
         setFeatureSetAction: (action) => dispatch(featureActions.setFeatureSetActionState(action)),
-
-        resetFeatureSet: (setId) => {
-            var featuresManager = new FeaturesManager(dispatch);
-
-            // Fetch the set and it's features from the server to reset.
-            featuresManager.fetchRemoteFeatureSets(setId);
-            featuresManager.fetchRemoteFeatures(setId);
-
-            // Reset the feature set action, since we shouldn't be in a actioning state.
-            dispatch(featureActions.setFeatureSetActionState(null));
-
-            // Clear values flagged as modified.
-            // TODO: best place to do this? Possibly in the same place that the set is fetched/added to state?
-            dispatch(featureActions.clearModifiedFeatures());
-        },
 
         onMouseEnterContext: _.debounce((setId, isEntered) => dispatch(featureActions.flagFeatureSetHover(setId, isEntered)), 50)
     }

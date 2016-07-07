@@ -6,10 +6,10 @@ const a = require("../actions/featureActions");
 var initialState = {
     // Features available to the system.
     items: [],
+    isEditingFeature: false,
 
     featureSets: [],
     selectedFeatureSetId: null,
-    selectedFeatureSetAction: null,
 
     // TODO: this should be a property of each feature. Create and work with Feature.js entities.
     modifiedFeatures: []
@@ -21,6 +21,20 @@ const reducer = createReducer({
     [a.setLocalFeatureSets]: (state, featureSets) => Object.assign({}, state, { featureSets }),
 
     [a.setLocalFeatures]: (state, features) => Object.assign({}, state, { items: features }),
+    [a.setLocalFeature]: (state, feature) => {
+        var featureIndex = _.findIndex(state.items, (f) => f.id === feature.id);
+
+        if (featureIndex === -1) {
+            return Object.assign({}, state, { items: [ ...state.items, feature ] });
+        }
+        else {
+            return Object.assign({}, state, { items: [
+                ...state.items.slice(0, featureIndex),
+                feature,
+                ...state.items.slice(featureIndex + 1)
+            ]});
+        }
+    },
 
     [a.setLocalFeaturesForSet]: (state, payload) => 
         Object.assign({}, state, { items: [
@@ -66,10 +80,9 @@ const reducer = createReducer({
         });
     },
 
-    [a.setSelectedFeatureSet]: (state, featureSetId) => Object.assign({}, state, { selectedFeatureSetId: 
-        featureSetId, selectedFeatureSetAction: null }),
+    [a.setSelectedFeatureSet]: (state, featureSetId) => Object.assign({}, state, { selectedFeatureSetId: featureSetId }),
 
-    [a.setFeatureSetActionState]: (state, actionState) => Object.assign({}, state, { selectedFeatureSetAction: actionState }),
+    [a.flagIsEditingFeature]: (state, isEditingFeature) => Object.assign({}, state, { isEditingFeature }),
 
     [a.flagFeatureAsModified]: (state, payload) => {
 
@@ -100,31 +113,22 @@ const reducer = createReducer({
         return newState;
     },
 
-    [a.clearModifiedFeatures]: (state) => {
-        if (state.modifiedFeatures.length > 0) {
-            return Object.assign({}, state, { modifiedFeatures: [] });
-        }
-        else {
-            return state;
-        }
-    },
-
-    [a.flagFeatureAsSelected]: (state, payload) => {
-        var featureIndex = _.findIndex(state.items, (f) => f.id === payload.featureId)
+    [a.flagFeatureAsSelected]: (state, { featureId, isSelected }) => {
+        var featureIndex = _.findIndex(state.items, (f) => f.id === featureId)
 
         return Object.assign({}, state, { items: [
             ...state.items.slice(0, featureIndex),
-            Object.assign({}, state.items[featureIndex], { isSelected: payload.isSelected }),
+            Object.assign({}, state.items[featureIndex], { isSelected }),
             ...state.items.slice(featureIndex + 1)
         ] });
     },
 
-    [a.flagFeatureSetHover]: (state, payload) => {
-        var featureSetIndex = _.findIndex(state.featureSets, (fs) => fs.id === payload.featureSetId)
+    [a.flagFeatureSetHover]: (state, { featureSetId, isHoverContext }) => {
+        var featureSetIndex = _.findIndex(state.featureSets, (fs) => fs.id === featureSetId)
 
         return Object.assign({}, state, { featureSets: [
             ...state.featureSets.slice(0, featureSetIndex),
-            Object.assign({}, state.featureSets[featureSetIndex], { isHoverContext: payload.isHoverContext }),
+            Object.assign({}, state.featureSets[featureSetIndex], { isHoverContext }),
             ...state.featureSets.slice(featureSetIndex + 1)
         ] });
     }

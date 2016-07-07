@@ -35,23 +35,22 @@ class FeaturesManager {
             });
     }
 
-    // Fetch remote Features async. Optional ID to fetch Features for a single target FeatureSet.
+    // Fetch remote Features async. Optional ID to fetch Features for a single target Feature.
     // Returns a promise to allow caller to chain actions.
-    fetchRemoteFeatures (featureSetId = null) {
-        var uri = featureSetId === null 
+    fetchRemoteFeatures (featureId = null) {
+        var uri = featureId === null 
             ? '/api/features'
-            : '/api/feature-sets/' + featureSetId + '/features';
+            : '/api/features/' + featureId;
 
         return remote(uri).then(
             (response) => {
                 if (this._shouldDispatchActions) {
-                    var featureEntities = _.map(response.entity, (f) => new FeatureEntity(f));
-
-                    if(featureSetId === null) {
+                    if(featureId === null) {
+                        var featureEntities = _.map(response.entity, (f) => new FeatureEntity(f));
                         this._dispatch(featureActions.setLocalFeatures(featureEntities));
                     }
                     else {
-                        this._dispatch(featureActions.setLocalFeaturesForSet(featureSetId, featureEntities));
+                        this._dispatch(featureActions.setLocalFeature(new FeatureEntity(response.entity)));
                     }
                 }
             });

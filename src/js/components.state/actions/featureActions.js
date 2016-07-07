@@ -7,6 +7,11 @@ const actions = {
         featureSets => featureSets
     ),
 
+    setLocalFeature: createAction(
+        "Update the local feature entity in the list of state items",
+        feature => feature
+    ),
+
     setLocalFeatures: createAction(
         "Set the list of local Features against the state for use by the applicaiton",
         features => features
@@ -37,9 +42,9 @@ const actions = {
         featureSetId => featureSetId
     ),
 
-    setFeatureSetActionState: createAction(
-        "Sets the current action state being used in the context of the selected FeatureSet",
-        actionState => actionState
+    flagIsEditingFeature: createAction(
+        "Flag that a feature is currently being edited",
+        isEditingFeature => isEditingFeature
     ),
 
     flagFeatureAsModified: createAction(

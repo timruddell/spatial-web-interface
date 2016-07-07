@@ -4,6 +4,7 @@ const classnames = require("classnames");
 
 const FeatureSetCollection = require("../../../components.content/detail/FeatureSetCollection");
 const FeatureSet = require("../../../components.content/detail/FeatureSet");
+const FeatureContainer = require("../../../components.content/detail/Feature");
 
 // TODO: different types of details should be deferred to different components.
 const DetailPaneView = ({
@@ -12,6 +13,7 @@ const DetailPaneView = ({
     selectedProject,
 
     selectedFeatureSet,
+    selectedFeature,
 
     // Callbacks
     dismissSelectedFeatureSet,
@@ -116,8 +118,13 @@ const DetailPaneView = ({
                     }
                 </div>
 
-                { /* Project data tab content */ }
-                <div className="tab-pane" id="control-sidebar-project-data-tab">
+                { /* Feature data tab content */ }
+                <div className="tab-pane" id="control-sidebar-project-data-tab" style={{ margin: "0 -8px 0 -8px" }}>
+                {
+                    selectedFeature 
+                        ? <FeatureContainer entity={ selectedFeature } showDetail={ true } />
+                        : <p>Select a feature on the map to populate this view</p>
+                }
                 </div>
 
                 { /* Project notes tab content */ }

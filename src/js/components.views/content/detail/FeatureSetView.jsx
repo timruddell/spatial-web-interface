@@ -1,20 +1,20 @@
 const classnames = require("classnames");
 
+const FeatureContainer = require("../../../components.content/detail/Feature");
+
 // Detail pane tab for FeatureSet information.
 const FeatureSetView = ({
     featureSet,
     features,
 
     showChildFeatures,
-    activeSetAction,
 
     // Callbacks
     onSelected,
     toggleFeatureSetVisible,
     onToggleFeatureLabelVisible,
-    locateFeatureSet,
+    onLocateFeatureSet,
     setFeatureSetAction,
-    resetFeatureSet,
     persistModifiedFeatures,
 
     onMouseEnterContext,
@@ -44,7 +44,7 @@ const FeatureSetView = ({
                     </div>
                     <span className="progress-description"
                             style={{ display: featureSet.isHoverContext || showChildFeatures ? "inherit" : "none", paddingTop: "4px" }}>
-                        <i onClick={ () => locateFeatureSet(featureSet.id) } className="menu-icon fa fa-location-arrow" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
+                        <i onClick={ () => onLocateFeatureSet(featureSet.id) } className="menu-icon fa fa-location-arrow" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
                         {
                             <i onClick={ () => toggleFeatureSetVisible(featureSet.id) } 
                                 className={classnames("menu-icon", "fa", {"fa-eye": featureSet.isVisible, "fa-eye-slash": !featureSet.isVisible })} 
@@ -53,16 +53,13 @@ const FeatureSetView = ({
                     </span>
                 </div>
             </div>
-            {
-                activeSetAction === 'EDIT' ? <p style={{ fontSize: "90%" }} >{"Left-click to select a feature on the map, then drag the feature's edges/corners to modify"}</p> : ''
-            }
             <div style={{ marginLeft: "-8px", marginRight: "-8px" }} >
                 {
-                    (showChildFeatures && activeSetAction === null) ? (
+                    (showChildFeatures) ? (
                         <ul className="sidebar-menu">
                             <li className="treeview active">
                                 <ul className="treeview-menu menu-open">
-                                    <li onClick={ () => setFeatureSetAction("EDIT") }><a href="#"><i className="fa fa-pencil-square-o"></i> <span>Add/edit features</span></a></li>
+                                    <li><a href="#"><i className="fa fa-plus"></i> <span>Add a feature</span></a></li>
                                     <li><a href="#"><i className="fa fa-download"></i> <span>Download feature set</span></a></li>
                                     {
                                         featureSet.hasLabels 
@@ -75,30 +72,13 @@ const FeatureSetView = ({
                     ) : ''
                 }
                 {
-                    (showChildFeatures && activeSetAction === 'EDIT') ? (
-                        <ul className="sidebar-menu">
-                            <li className="treeview active">
-                                <a href="#">
-                                    <i className="fa fa-pencil-square-o"></i>
-                                    <span>Editing features...</span>
-                                </a>
-                                <ul className="treeview-menu menu-open">
-                                    <li><a href="#"><i className="fa fa-plus"></i> <span>Add a feature</span></a></li>
-                                    <li onClick={ () => persistModifiedFeatures(featureSet.id) } ><a href="#"><i className="fa fa-check"></i> <span>Save changes</span></a></li>
-                                    <li onClick={ () => resetFeatureSet(featureSet.id) }><a href="#"><i className="fa fa-ban"></i> <span>Discard changes</span></a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    ) : ''
-                }
-                {
                     !showChildFeatures ? '' : (
                         <ul className="sidebar-menu">
-                            <li className="header">FEATURES</li>
+                            <li className="header" style={{ marginBottom: "10px" }} >FEATURES</li>
                             {
                                 _.map(_.sortBy(features, "name"), (f) => {
                                     return (
-                                        <li key={ f.id } className={ f.isSelected ? "active" : "" }><a href="#"><i className="fa fa-map-marker text-aqua"></i> <span>{f.name}</span></a></li>
+                                        <li key={ f.id } style={{ margin: "0px 16px 0px 16px" }} ><FeatureContainer entity={f} /></li>
                                     )
                                 })
                             }

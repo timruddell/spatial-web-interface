@@ -10,7 +10,8 @@ const mapStateToProps = (state) => {
     return {
         isOpen: state.layout.detailPaneIsOpen,
         selectedProject: _.find(state.projects.items, (p) => p.id === state.projects.selectedProjectId),
-        selectedFeatureSet: _.find(state.features.featureSets, (fs) => fs.id === state.features.selectedFeatureSetId)
+        selectedFeatureSet: _.find(state.features.featureSets, (fs) => fs.id === state.features.selectedFeatureSetId),
+        selectedFeature: _.find(state.features.items, (f) => f.isSelected)
     }
 }
 
