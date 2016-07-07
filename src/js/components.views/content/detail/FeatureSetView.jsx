@@ -11,6 +11,8 @@ const FeatureSetView = ({
 
     // Callbacks
     onSelected,
+    onFeatureSelected,
+
     toggleFeatureSetVisible,
     onToggleFeatureLabelVisible,
     onLocateFeatureSet,
@@ -78,7 +80,7 @@ const FeatureSetView = ({
                             {
                                 _.map(_.sortBy(features, "name"), (f) => {
                                     return (
-                                        <li key={ f.id } style={{ margin: "0px 16px 0px 16px" }} ><FeatureContainer entity={f} /></li>
+                                        <li key={ f.id } onClick={ () => onFeatureSelected(f.id) } style={{ margin: "0px 16px 0px 16px" }} ><FeatureContainer entity={f} /></li>
                                     )
                                 })
                             }

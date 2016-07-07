@@ -22,6 +22,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getDispatch: () => dispatch,
 
         onSelected: (set) => dispatch(featureActions.setSelectedFeatureSet(set.id)),
+        onFeatureSelected: (featureId) => {
+            dispatch(featureActions.clearFeatureSelectedFlags());
+            dispatch(featureActions.flagFeatureAsSelected(featureId, true));
+        },
 
         toggleFeatureSetVisible: (setId) => {
             dispatch(featureActions.toggleFeatureSetVisibility(setId));

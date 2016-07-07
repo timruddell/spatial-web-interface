@@ -62,6 +62,10 @@ const actions = {
         (featureId, isSelected) => ({ featureId, isSelected })
     ),
 
+    clearFeatureSelectedFlags: createAction(
+        "Clear feature selected flags against all features in the state"
+    ),
+
     flagFeatureSetHover: createAction(
         "Flag a feature set as being the context of a cursor hover",
         (featureSetId, isHoverContext) => ({ featureSetId, isHoverContext })

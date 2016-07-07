@@ -22,10 +22,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         onEditFeature: () => dispatch(featureActions.flagIsEditingFeature(true)),
 
         onDiscardEdits: () => {
-            var featuresManager = new FeaturesManager(dispatch);
-            featuresManager.fetchRemoteFeatures(ownProps.entity.id);
-
+            // Disable feature editing.
             dispatch(featureActions.flagIsEditingFeature(false));
+
+            var featuresManager = new FeaturesManager(dispatch);
+            // Re-fetch the feature from the server. Once available, select the feature again.
+            featuresManager.fetchRemoteFeatures(ownProps.entity.id).then(
+                () => {
+                    dispatch(featureActions.flagFeatureAsSelected(ownProps.entity.id, true));
+                });
         }
     }
 }

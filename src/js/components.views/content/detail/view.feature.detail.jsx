@@ -52,8 +52,11 @@ const view = ({
             ) : ''
         }
         {
+            isEditingFeature && showDetail ? <p style={{ fontSize: "90%" }} >{"Drag the feature's edges/corners to modify"}</p> : ''
+        }
+        {
             isEditingFeature && showDetail ? (
-                <ul className="sidebar-menu">
+                <ul className="sidebar-menu" style={{ marginLeft: "-8px", marginRight: "-8px" }}>
                     <li className="treeview active">
                         <a href="#">
                             <i className="fa fa-pencil-square-o"></i>

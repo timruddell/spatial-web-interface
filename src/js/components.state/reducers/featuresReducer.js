@@ -123,6 +123,12 @@ const reducer = createReducer({
         ] });
     },
 
+    [a.clearFeatureSelectedFlags]: (state) => {
+        return Object.assign({}, state, { items: [
+            ..._.map(state.items, (f) => Object.assign({}, f, { isSelected: false }))
+        ]});
+    },
+
     [a.flagFeatureSetHover]: (state, { featureSetId, isHoverContext }) => {
         var featureSetIndex = _.findIndex(state.featureSets, (fs) => fs.id === featureSetId)
 

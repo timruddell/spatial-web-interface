@@ -17,6 +17,7 @@ const buildSelector = (map, dispatch) => {
     // Standard selection interaction. Overidden by special selectors.
     var standardSelectInteraction = new ol.interaction.Select();
 
+    // TODO: move to separate file?
     const buildSelectStyle = (feature) => {
         var layer = standardSelectInteraction.getLayer(feature);
         var layerStyle = layer.getStyleFunction()(feature);
@@ -32,6 +33,7 @@ const buildSelector = (map, dispatch) => {
         return layerStyle;
     }
 
+    // TODO: move to separate file?
     const buildModifyStyle = (feature) => {
         const gold = [255, 215, 0, 0.65];
         const goldFill = [255, 215, 0, 0.15];
@@ -86,17 +88,24 @@ const buildSelector = (map, dispatch) => {
     
     (isEditingFeature) => {
 
+        // Deactivate the selector while editing. The selected features will remain selected but
+        // can't be changed.
+        standardSelectInteraction.setActive(!isEditingFeature);
+
         if (selectOnEventKey) {
             standardSelectInteraction.unByKey(selectOnEventKey);
         }
         selectOnEventKey = standardSelectInteraction.on("select", (event) => {
+            dispatch(featureActions.clearFeatureSelectedFlags());
+
             // Do deselections first - strange behaviour when an item is selected again, it is also deleselcted.
             // Set styles explicitly against features here. Using a style function conflicts with the modify 
             // interaction's styling.
-            event.deselected.forEach((f) => {
-                dispatch(featureActions.flagFeatureAsSelected(f.getId(), false));
-                f.setStyle(null);            
-            });
+            if (event.deselected.length > 0) {
+                event.deselected.forEach((f) => {
+                    f.setStyle(null);            
+                });
+            }
 
             event.selected.forEach((f) => {
                 dispatch(featureActions.flagFeatureAsSelected(f.getId(), true));
@@ -115,14 +124,22 @@ const buildSelector = (map, dispatch) => {
 
         // Clear all interactions and flush the standard select with an event.
         activeInteractions.clear();
-        var selectedFeatures = standardSelectInteraction.getFeatures().getArray();
+        var selectedFeatures = standardSelectInteraction.getFeatures();
 
-        if (selectedFeatures.length > 0) {
+        // If the feature is going to be edited - it needs to be re-selected in order to
+        // receieve the modify styling.            
+        if (selectedFeatures.getArray().length > 0 && isEditingFeature) {
             standardSelectInteraction.dispatchEvent({
                 deselected: [],
-                selected: selectedFeatures,
+                selected: selectedFeatures.getArray(),
                 type: 'select'
             });
+        }
+
+        // If we're ending an edit, and need to go back to standard selection rules, simply
+        // flush the selected list and re-select the feature from the state.
+        if (!isEditingFeature) {
+            selectedFeatures.clear();
         }
 
         // Differring interaction logic if we're needing feature modifications.
