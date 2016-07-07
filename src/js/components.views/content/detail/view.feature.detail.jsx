@@ -71,6 +71,28 @@ const view = ({
                 </ul>
             ) : ''
         }
+        {
+            showDetail && entity.data ? (
+                <div style={{ marginTop: "20px" }}>
+                    <table className="table table-condensed bg-light-blue-active">
+                    <tbody>
+                    <tr style={{ fontWeight: "bold" }}>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                    {
+                        _.map(_.sortBy(_.keys(entity.data)), (k) => (
+                            <tr key={ k }>
+                                <td>{ k }</td>
+                                <td>{ entity.data[k] }</td>
+                            </tr>
+                        ))
+                    }
+                    </tbody>
+                    </table>
+                </div>
+            ) : ''
+        }
         </div>
     );
 }
