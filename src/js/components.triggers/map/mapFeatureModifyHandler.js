@@ -44,8 +44,7 @@ const buildSelector = (map, dispatch) => {
                         if (!!f.getId()) {
                             // Send the updated geometry to append to the state.
                             var geometry = geoJsonLoader.writeGeometry(f.getGeometry());
-
-                            dispatch(featureActions.flagFeatureAsModified(f.getId(), geometry));
+                            dispatch(featureActions.updateFeatureState(f.getId(), { geometry }));
                         }
                     });
                 });

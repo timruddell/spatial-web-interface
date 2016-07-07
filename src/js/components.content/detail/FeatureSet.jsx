@@ -11,18 +11,15 @@ const featureActions = require("../../components.state/actions/featureActions");
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        features: _.filter(state.features.items, (f) => f.featureSetId === ownProps.featureSet.id),
-        modifiedFeatures: state.features.modifiedFeatures
+        features: _.filter(state.features.items, (f) => f.featureSetId === ownProps.featureSet.id)
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        // Hack to access dispatcher in mergeProps.
-        getDispatch: () => dispatch,
-
         onSelected: (set) => dispatch(featureActions.setSelectedFeatureSet(set.id)),
         onFeatureSelected: (featureId) => {
+            // TODO: combine these two? Could have a flag to optionally clear.
             dispatch(featureActions.clearFeatureSelectedFlags());
             dispatch(featureActions.flagFeatureAsSelected(featureId, true));
         },
@@ -39,31 +36,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(mapActions.fitContentToView(setId, "featureSet"));
         },
 
-        setFeatureSetAction: (action) => dispatch(featureActions.setFeatureSetActionState(action)),
-
         onMouseEnterContext: _.debounce((setId, isEntered) => dispatch(featureActions.flagFeatureSetHover(setId, isEntered)), 50)
     }
 }
 
-// We're having to use mergeProps here in order to access state properties for callbacks. This seems less than
-// ideal but is the recommended way currently: https://github.com/reactjs/react-redux/issues/237
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-
-    // Return the default merge logic, with the extra callback.
-    return Object.assign({}, ownProps, stateProps, dispatchProps, {
-
-        persistModifiedFeatures: (setId) => {    
-            // Get the modified features from the state props.
-            var modifiedIds = stateProps.modifiedFeatures;
-            var features = _.filter(stateProps.features, (f) => _.indexOf(modifiedIds, f.id) !== -1);
-
-            if (features.length > 0) {
-                var featuresManager = new FeaturesManager(dispatchProps.getDispatch());
-                featuresManager.updateRemoteFeatures(features);
-            }
-        }
-    });
-}
-
-const FeatureSetContainer = connect(mapStateToProps, mapDispatchToProps, mergeProps)(FeatureSetView);
+const FeatureSetContainer = connect(mapStateToProps, mapDispatchToProps)(FeatureSetView);
 module.exports = FeatureSetContainer;

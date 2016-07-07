@@ -16,10 +16,8 @@ const FeatureSetView = ({
     toggleFeatureSetVisible,
     onToggleFeatureLabelVisible,
     onLocateFeatureSet,
-    setFeatureSetAction,
-    persistModifiedFeatures,
 
-    onMouseEnterContext,
+    onMouseEnterContext
 }) => {
     return (
         <div>

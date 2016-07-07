@@ -73,18 +73,7 @@ class FeaturesManager {
             }));
         });
 
-        if (this._shouldDispatchActions) {
-            return Promise.all(promises).then(() => {
-                // Clear the set action.
-                this._dispatch(featureActions.setFeatureSetActionState(null));
-
-                // Clear values flagged as modified.
-                this._dispatch(featureActions.clearModifiedFeatures());
-            });
-        }
-        else {
-            return Promise.all(promises);
-        }
+        return Promise.all(promises);
     }
 }
 

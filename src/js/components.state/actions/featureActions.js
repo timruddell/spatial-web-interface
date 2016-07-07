@@ -47,14 +47,9 @@ const actions = {
         isEditingFeature => isEditingFeature
     ),
 
-    flagFeatureAsModified: createAction(
-        "Flags a Feature as had having modifications",
-        (featureId, newGeometry) => ({ featureId, newGeometry })
-    ),
-
-    // TODO: redo
-    clearModifiedFeatures: createAction(
-        "Clears the list of Features that are flagged as modified"
+    updateFeatureState: createAction(
+        "Updates a feature state in the application state",
+        (featureId, stateChanges) => ({ featureId, stateChanges })
     ),
 
     flagFeatureAsSelected: createAction(

@@ -16,7 +16,8 @@ const view = ({
     onSelectFeatureSet,
 
     onEditFeature,
-    onDiscardEdits
+    onDiscardEdits,
+    onSaveEdits
 }) => {
     return (
         <div>
@@ -63,7 +64,7 @@ const view = ({
                             <span>Editing feature...</span>
                         </a>
                         <ul className="treeview-menu menu-open">
-                            <li><a href="#"><i className="fa fa-check"></i> <span>Save changes</span></a></li>
+                            <li onClick={ onSaveEdits }><a href="#"><i className="fa fa-check"></i> <span>Save changes</span></a></li>
                             <li onClick={ onDiscardEdits }><a href="#"><i className="fa fa-ban"></i> <span>Discard changes</span></a></li>
                         </ul>
                     </li>

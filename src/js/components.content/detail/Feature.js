@@ -31,6 +31,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 () => {
                     dispatch(featureActions.flagFeatureAsSelected(ownProps.entity.id, true));
                 });
+        },
+
+        onSaveEdits: () => {
+            var featuresManager = new FeaturesManager(dispatch);
+            featuresManager.updateRemoteFeatures([ownProps.entity]);
+            dispatch(featureActions.flagIsEditingFeature(false));
         }
     }
 }

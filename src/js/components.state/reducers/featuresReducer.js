@@ -9,10 +9,7 @@ var initialState = {
     isEditingFeature: false,
 
     featureSets: [],
-    selectedFeatureSetId: null,
-
-    // TODO: this should be a property of each feature. Create and work with Feature.js entities.
-    modifiedFeatures: []
+    selectedFeatureSetId: null
 }
 
 
@@ -84,33 +81,15 @@ const reducer = createReducer({
 
     [a.flagIsEditingFeature]: (state, isEditingFeature) => Object.assign({}, state, { isEditingFeature }),
 
-    [a.flagFeatureAsModified]: (state, payload) => {
+    [a.updateFeatureState]: (state, { featureId, stateChanges }) => {
+        var featureIndex = _.findIndex(state.items, (f) => f.id === featureId);
 
-        var newState = {};
-        // Only change state if the feature is not already flagged as being modified.
-        if (_.indexOf(state.modifiedFeatures, payload.featureId) === -1) {
-            newState = Object.assign({}, state, {
-                // Concatenate the new Feature ID.
-                modifiedFeatures: [
-                    ...state.modifiedFeatures,
-                    payload.featureId
-                ]
-            });
-        } else {
-            newState = state;
-        }
-
-        // Update the feature state's geometry.
-        var featureIndex = _.findIndex(state.items, (f) => f.id === payload.featureId);
-
-        newState = Object.assign({}, newState, { 
+        return Object.assign({}, state, { 
             items: [
                 ...state.items.slice(0, featureIndex),
-                Object.assign({}, state.items[featureIndex], { geometry: payload.newGeometry }),
+                Object.assign({}, state.items[featureIndex], stateChanges),
                 ...state.items.slice(featureIndex + 1)
             ]});
-
-        return newState;
     },
 
     [a.flagFeatureAsSelected]: (state, { featureId, isSelected }) => {

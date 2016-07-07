@@ -6,7 +6,7 @@ const buildSelector = (map, dispatch) => {
     // TODO: move to separate file?
     const buildSelectStyle = (feature) => {
         var layer = map.getLayerByFeatureId(feature.getId());
-        var layerStyle = layer.getStyleFunction()(feature);
+        var layerStyle = layer.getStyleFunction()(feature, map.getSize());
 
         var stroke = layerStyle.getStroke();
         if (stroke) {
@@ -61,7 +61,11 @@ const buildSelector = (map, dispatch) => {
     //
     return createSelector([
         (state) => state.features.isEditingFeature,
-        (state) => state.features.items
+
+        // Changes to both FeatureSets and Features cause map re-renders, therefore we need
+        // to restyle features on changes to both.
+        (state) => state.features.items,
+        (state) => state.features.featureSets
     ],
     
     (isEditingFeature, features) => {
