@@ -3,8 +3,9 @@ const triggerBuilders = [
     require("./map/changeBaseLayerSource"),
     require("./map/fitContent"),
     require("./map/renderFeatures"),
-    require("./map/mapInteractionHandler")
-    
+    require("./map/mapStateSelectHandler"),
+    require("./map/mapFeatureModifyHandler"),
+    require("./map/mapFeatureStyleHandler")
 ];
 
 // Collates and handles running all map related triggers.
