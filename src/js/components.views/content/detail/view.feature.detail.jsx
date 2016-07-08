@@ -84,7 +84,11 @@ const view = ({
                         _.map(_.sortBy(_.keys(entity.data)), (k) => (
                             <tr key={ k }>
                                 <td>{ k }</td>
-                                <td>{ entity.data[k] }</td>
+                                <td>{ 
+                                    entity.data[k] === "symbol:file-text" 
+                                        ? <i className="fa fa-file-text"></i>
+                                        : entity.data[k]
+                                }</td>
                             </tr>
                         ))
                     }

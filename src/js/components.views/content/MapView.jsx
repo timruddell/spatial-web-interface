@@ -7,7 +7,7 @@ const MapView = () => {
     }
 
     return (
-        <div style={styleMapFixedContainer} className={"map"}></div>
+        <div id={"map-content-root"} style={styleMapFixedContainer} className={"map"}></div>
     );
 }
 

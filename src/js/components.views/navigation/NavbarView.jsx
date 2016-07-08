@@ -5,7 +5,9 @@ const MapSourceSelector = require("../../components.navigation/MapSourceSelector
 const ProjectsSelector = require("../../components.navigation/ProjectsSelector");
 const Debug = require("../../components/Debug");
 
-const NavbarView = () => {
+const NavbarView = ({
+    onPdfExport
+}) => {
      return (
             <section className="sidebar">
                 <form action="#" method="get" className="sidebar-form">
@@ -27,6 +29,20 @@ const NavbarView = () => {
                         </a>
                     </li>
                     <li className="header">CONTENT</li>
+                    <li className="treeview">
+                        <a href="#">
+                            <i className="fa fa-map"></i> <span>Maps</span> <i className="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul className="treeview-menu">
+                            <MapSourceSelector />
+                            
+                            <li onClick={ () => onPdfExport() }>
+                                <a href="#">
+                                    <i className="fa fa-file-pdf-o"></i> Export map
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li>
                         <a href="#">
                             <i className="fa fa-area-chart"></i> <span>Data</span>
@@ -46,14 +62,6 @@ const NavbarView = () => {
                         </a>
                     </li>
                     <li className="header">OPTIONS</li>
-                    <li className="treeview">
-                        <a href="#">
-                            <i className="fa fa-map"></i> <span>Maps</span> <i className="fa fa-angle-left pull-right"></i>
-                        </a>
-                        <ul className="treeview-menu">
-                            <MapSourceSelector />
-                        </ul>
-                    </li>
                     <li className="treeview">
                         <a href="#">
                             <i className="fa fa-bug"></i> <span>Debug</span> <i className="fa fa-angle-left pull-right"></i>
