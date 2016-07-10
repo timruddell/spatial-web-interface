@@ -1,74 +1,72 @@
 const classnames = require("classnames");
 
+const FeatureContainer = require("../../../components.content/detail/Feature");
+
 // Detail pane tab for FeatureSet information.
 const FeatureSetView = ({
     featureSet,
+    features,
+
     showChildFeatures,
-    activeSetAction,
 
     // Callbacks
     onSelected,
+    onFeatureSelected,
+    onFeatureContext,
+
     toggleFeatureSetVisible,
-    locateFeatureSet,
-    setFeatureSetAction,
-    resetFeatureSet,
-    persistModifiedFeatures
+    onToggleFeatureLabelVisible,
+    onLocateFeatureSet,
+
+    onMouseEnterContext
 }) => {
     return (
         <div>
-            <div key={ featureSet.id } className={classnames("info-box", {"bg-light-blue": featureSet.visible, "bg-gray": !featureSet.visible })} style={{ minHeight: "65px" }}>
+            <div key={ featureSet.id } 
+                    className={classnames("info-box", {"bg-light-blue": featureSet.isVisible, "bg-gray": !featureSet.isVisible })} 
+                    style={{ minHeight: "65px" }}
+                    onMouseEnter={ () => showChildFeatures ? {} : onMouseEnterContext(featureSet.id, true) }
+                    onMouseLeave={ () => showChildFeatures ? {} : onMouseEnterContext(featureSet.id, false) }>
                 <span className="info-box-icon" style={{ width: "36px", height: "65px" }}>
-                    <i className="menu-icon fa fa-flag" style={{ fontSize: "50%", float: "left", marginLeft: "7px", marginTop: "22px" }}></i>
+                    <i className="menu-icon fa fa-cubes" style={{ fontSize: "40%", float: "left", marginLeft: "7px", marginTop: "24px" }}></i>
                 </span>
 
                 <div className="info-box-content" style={{ marginLeft: "36px" }}>
-                <span onClick={ () => onSelected(featureSet) } className="info-box-text" style={{ cursor: "pointer" }}>{ featureSet.name + " (" + featureSet.features.length + ")"}</span>
+                    <span onClick={ () => onSelected(featureSet) } className="info-box-text" style={{ cursor: "pointer" }}>
+                        { featureSet.name }
+                        <span className={classnames("label", { "bg-blue": features.length > 0, "bg-gray": features.length === 0 })} 
+                            style={{ float: "right", marginTop: "3px" }}>
+                                { features.length }
+                            </span>
+                    </span>
 
-                <div className="progress">
-                    <div className="progress-bar" style={{width: "0%"}}></div>
-                </div>
-                    <span className="progress-description" style={{ paddingTop: "4px" }}>
-                        <i onClick={ () => locateFeatureSet(featureSet.id) } className="menu-icon fa fa-map-marker" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
+                    <div className="progress">
+                        <div className="progress-bar" style={{width: "0%"}}></div>
+                    </div>
+                    <span className="progress-description"
+                            style={{ display: featureSet.isHoverContext || showChildFeatures ? "inherit" : "none", paddingTop: "4px" }}>
+                        <i onClick={ () => onLocateFeatureSet(featureSet.id) } className="menu-icon fa fa-location-arrow" style={{ float: "right", marginLeft: "12px", cursor: "pointer" }}></i>
                         {
                             <i onClick={ () => toggleFeatureSetVisible(featureSet.id) } 
-                                className={classnames("menu-icon", "fa", {"fa-eye": featureSet.visible, "fa-eye-slash": !featureSet.visible })} 
+                                className={classnames("menu-icon", "fa", {"fa-eye": featureSet.isVisible, "fa-eye-slash": !featureSet.isVisible })} 
                                 style={{ float: "right", marginLeft: "10px", cursor: "pointer" }}></i>
-                        }                                    
+                        }
                     </span>
                 </div>
             </div>
-            {
-                activeSetAction === 'EDIT' ? <p style={{ fontSize: "90%" }} >{"Left-click to select a feature on the map, then drag the feature's edges/corners to modify"}</p> : ''
-            }
             <div style={{ marginLeft: "-8px", marginRight: "-8px" }} >
                 {
-                    (showChildFeatures && activeSetAction === null) ? (
+                    (showChildFeatures) ? (
                         <ul className="sidebar-menu">
                             <li className="treeview active">
-                                <a href="#">
-                                    <i className="fa fa-bolt"></i>
-                                    <span>Actions</span>
-                                </a>
-                                <ul className="treeview-menu menu-open">
-                                    <li onClick={ () => setFeatureSetAction("EDIT") }><a href="#"><i className="fa fa-pencil-square-o"></i> <span>Add/edit features</span></a></li>
-                                    <li><a href="#"><i className="fa fa-download"></i> <span>Download feature set</span></a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    ) : ''
-                }
-                {
-                    (showChildFeatures && activeSetAction === 'EDIT') ? (
-                        <ul className="sidebar-menu">
-                            <li className="treeview active">
-                                <a href="#">
-                                    <i className="fa fa-pencil-square-o"></i>
-                                    <span>Editing features...</span>
-                                </a>
                                 <ul className="treeview-menu menu-open">
                                     <li><a href="#"><i className="fa fa-plus"></i> <span>Add a feature</span></a></li>
-                                    <li onClick={ () => persistModifiedFeatures(featureSet.id) } ><a href="#"><i className="fa fa-check"></i> <span>Save changes</span></a></li>
-                                    <li onClick={ () => resetFeatureSet(featureSet.id) }><a href="#"><i className="fa fa-ban"></i> <span>Discard changes</span></a></li>
+                                    <li><a href="#"><i className="fa fa-download"></i> <span>Download feature set</span></a></li>
+                                    {
+                                        featureSet.hasLabels 
+                                            ? <li onClick={ onToggleFeatureLabelVisible } ><a href="#"><i className="fa fa-tag"></i> <span>{featureSet.labelsVisible ? "Turn off labels" : "Turn on labels"}</span></a></li>
+                                            : ""
+                                    }
                                 </ul>
                             </li>
                         </ul>
@@ -77,11 +75,11 @@ const FeatureSetView = ({
                 {
                     !showChildFeatures ? '' : (
                         <ul className="sidebar-menu">
-                            <li className="header">FEATURES</li>
+                            <li className="header" style={{ marginBottom: "10px" }} >FEATURES</li>
                             {
-                                _.map(featureSet.features, (f) => {
+                                _.map(_.sortBy(features, "name"), (f) => {
                                     return (
-                                        <li key={ f.id }><a href="#"><i className="fa fa-circle-o text-aqua"></i> <span>{f.name}</span></a></li>
+                                        <li key={ f.id } onClick={ () => f.isSelected ? onFeatureContext() : onFeatureSelected(f.id) } style={{ margin: "0px 16px 0px 16px" }} ><FeatureContainer entity={f} /></li>
                                     )
                                 })
                             }

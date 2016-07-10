@@ -1,33 +1,21 @@
 'use strict'
 
 const { connect } = require("react-redux");
-
 const FeatureSetCollectionView = require("../../components.views/content/detail/FeatureSetCollectionView");
+
+const featureActions = require("../../components.state/actions/featureActions");
 
 const mapStateToProps = (state) => {
     return {
-        featureSets: state.features.sets
+        // Feature sets for the currently selected Project.
+        featureSets: _.filter(state.features.featureSets, (fs) => fs.projectId === state.projects.selectedProjectId)
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         toggleFeatureSetVisible: (setId) => {
-            dispatch({
-                type: "TOGGLE_FEATURESET_VISIBILITY",
-                id: setId
-            });
-        },
-
-        locateFeatureSet: (setId) => {
-            dispatch({
-                type: "MAP_VIEW_FIT_FEATURESET",
-                value: setId
-            });
-        },
-
-        featureSetSelected: (setId) => {
-
+            dispatch(featureActions.toggleFeatureSetVisibility(setId));
         }
     }
 }

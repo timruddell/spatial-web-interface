@@ -1,92 +1,47 @@
 'use strict'
 
 const { connect } = require("react-redux");
+
 const fetchRemote = require("../../utilities/restClient");
-
 const FeatureSetView = require("../../components.views/content/detail/FeatureSetView");
-const FeatureSet = require("../../entities/FeatureSet");
 
-// TODO: the following two functions should be part of a class extending React.Component so
-// they can access the context store and don't need so many arguments passed.
+const mapActions = require("../../components.state/actions/mapActions");
+const featureActions = require("../../components.state/actions/featureActions");
+const layoutActions = require("../../components.state/actions/layoutActions");
 
-// Fetch and create the FeatureSet entity.
-const restoreFeatureSet = (setId, receiver) => {
-    Promise.all([
-        fetchRemote('/api/feature-sets/' + setId),
-        fetchRemote('/api/feature-sets/' + setId + '/features')
-    ]).then(
-        ([set, features]) => {
-            var featureSet = new FeatureSet(set.entity, features.entity);
-            receiver(featureSet);
-        });
-}
 
-const persistModifiedFeatures = (modifiedFeatures) => {
-
-}
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        activeSetAction: state.features.selectedSetAction
+        features: _.filter(state.features.items, (f) => f.featureSetId === ownProps.featureSet.id)
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        onSelected: (set) => {
-            dispatch({
-                type: "FEATURES_SET_SELECTED_SET",
-                value: set
-            });
+        onSelected: (set) => dispatch(featureActions.setSelectedFeatureSet(set.id)),
+        onFeatureSelected: (featureId) => {
+            dispatch(featureActions.clearFeatureSelectedFlags());
+            dispatch(featureActions.flagFeatureAsSelected(featureId, true));
+        },
+
+        // When the user selects a feature that is already selected.
+        onFeatureContext: () => {
+            dispatch(layoutActions.setActiveDetailTab("feature"));
         },
 
         toggleFeatureSetVisible: (setId) => {
-            dispatch({
-                type: "TOGGLE_FEATURESET_VISIBILITY",
-                id: setId
-            });
+            dispatch(featureActions.toggleFeatureSetVisibility(setId));
         },
 
-        locateFeatureSet: (setId) => {
-            dispatch({
-                type: "MAP_VIEW_FIT_FEATURESET",
-                value: setId
-            });
+        onToggleFeatureLabelVisible: (setId) => {
+            dispatch(featureActions.setFeatureSetLabelVisible(ownProps.featureSet.id, !ownProps.featureSet.labelsVisible));
         },
 
-        setFeatureSetAction: (action) => {
-            dispatch({
-                type: "FEATURES_SET_FEATURESET_SELECTED_ACTION",
-                value: action
-            });
+        onLocateFeatureSet: (setId) => {
+            dispatch(mapActions.fitContentToView(setId, "featureSet"));
         },
 
-        resetFeatureSet: (setId) => {
-            // Fetch the set and it's features from the server to reset.
-            restoreFeatureSet(setId, (featureSet) => dispatch({
-                type: "UPDATE_FEATURE_SET",
-                value: featureSet
-            }));
-
-            // Reset the feature set action, since we shouldn't be in a actioning state.    
-            dispatch({
-                type: "FEATURES_SET_FEATURESET_SELECTED_ACTION",
-                value: null
-            });
-
-            // Clear values flagged as modified.
-            // TODO: best place to do this? Possibly in the same place that the set is fetched/added to state?
-            dispatch({
-                type: "FEATURES_CLEAR_MODIFIED"
-            });
-        },
-
-        persistModifiedFeatures: (setId) => {
-            dispatch({
-                type: "FEATURES_SET_PERSIST_MODIFIED",
-                value: true
-            });
-        }
+        onMouseEnterContext: _.debounce((setId, isEntered) => dispatch(featureActions.flagFeatureSetHover(setId, isEntered)), 50)
     }
 }
 

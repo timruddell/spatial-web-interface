@@ -4,7 +4,10 @@ const { Component } = require("react");
 const { connect } = require("react-redux");
 const fetchRemote = require("../utilities/restClient");
 
-var ProjectsSelectorView = require("../components.views/navigation/ProjectsSelectorView");
+const ProjectsSelectorView = require("../components.views/navigation/ProjectsSelectorView");
+
+const projectActions = require("../components.state/actions/projectActions");
+const layoutActions = require("../components.state/actions/layoutActions");
 
 // Wrapper Project selector component. Provides access to lifecycle hooks for loading data.
 class ProjectsSelector extends Component {
@@ -23,6 +26,16 @@ class ProjectsSelector extends Component {
                 console.error("Error loading project information: Status code " + response.status.code)
             }
         }.bind(this));
+
+        // TODO: move to own component.
+        fetchRemote('/api/ownerships').then(function (response) {
+            if (response.status.code === 200) {
+                this.props.onOwnershipDataLoaded(response.entity);
+            }
+            else {
+                console.error("Error loading ownership information: Status code " + response.status.code)
+            }
+        }.bind(this));
     }
 
     render() {
@@ -30,20 +43,11 @@ class ProjectsSelector extends Component {
     }
 }
 
-const recursiveProjectCount = (projects) => {
-    return _.reduce(
-        projects, 
-        function (memo, project) {
-            return project.type === "group" ? 
-                recursiveProjectCount(project.children) 
-                : memo + 1 
-        }, 0);
-}
-
 const mapStateToProps = (state) => {
     return {
         projects: state.projects.items,
-        projectCount: recursiveProjectCount(state.projects.items)
+        selectedProjectId: state.projects.selectedProjectId,
+        projectCount: state.projects.items.length
     }
 }
 
@@ -54,31 +58,19 @@ const mapDispatchToProps = (dispatch) => {
             // Hack: use animations instead of delayed dispatches. Callbacks should NOT
             // be responsible for timing UI transitions...
 
-            dispatch({
-                type: "LAYOUT_DETAIL-PANE_SET_OPEN",
-                value: false
-            });
-
+            dispatch(layoutActions.closeDetailPane());
+            
             _.delay(() => {
-                dispatch({
-                    type: "PROJECT_SELECTION_CHANGED",
-                    value: project
-                });
+                dispatch(layoutActions.setActiveDetailTab("project"));
+                dispatch(projectActions.setSelectedProject(project.id));
 
                 // Open the project info pane.
-                dispatch({
-                    type: "LAYOUT_DETAIL-PANE_SET_OPEN",
-                    value: true
-                });
+                dispatch(layoutActions.openDetailPane());
             }, 300);
         },
 
-        onProjectDataLoaded: (items) => {
-            dispatch({
-                type: "PROJECT_LOCAL_SET",
-                items
-            })
-        }
+        onProjectDataLoaded: (items) => dispatch(projectActions.setLocalProjects(items)),
+        onOwnershipDataLoaded: (items) => dispatch(projectActions.setLocalOwnerships(items))
     }
 }
 
