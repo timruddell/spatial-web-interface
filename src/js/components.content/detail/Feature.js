@@ -30,17 +30,40 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(featureActions.flagIsEditingFeature(false));
 
             var featuresManager = new FeaturesManager(dispatch);
-            // Re-fetch the feature from the server. Once available, select the feature again.
-            featuresManager.fetchRemoteFeatures(ownProps.entity.id).then(
-                () => {
-                    dispatch(featureActions.flagFeatureAsSelected(ownProps.entity.id, true));
-                });
+
+            // If we're editing a persisted feature, just re-fetch the feature.
+            // Otherwise just remove the created feature from the store.
+            if (ownProps.entity.id !== 0) {
+                // Re-fetch the feature from the server. Once available, select the feature again.
+                featuresManager.fetchRemoteFeatures(ownProps.entity.id).then(
+                    () => {
+                        dispatch(featureActions.flagFeatureAsSelected(ownProps.entity.id, true));
+                    });
+            }
+            else {
+                dispatch(featureActions.removeLocalFeature(0));
+            }
         },
 
         onSaveEdits: () => {
             var featuresManager = new FeaturesManager(dispatch);
-            featuresManager.updateRemoteFeatures([ownProps.entity]);
+
+            // Create/update.
+            if (ownProps.entity.id !== 0) {
+                featuresManager.updateRemoteFeatures([ownProps.entity]);
+            }
+            else {
+                featuresManager.createRemoteFeature(ownProps.entity);
+                // Remove the temporary feature from the state.
+                dispatch(featureActions.removeLocalFeature(0));
+            }
+            
             dispatch(featureActions.flagIsEditingFeature(false));
+        },
+
+        // Update the feature name.
+        onFeatureNameUpdate: (value) => {
+            dispatch(featureActions.updateFeatureState(ownProps.entity.id, { name: value }));
         }
     }
 }

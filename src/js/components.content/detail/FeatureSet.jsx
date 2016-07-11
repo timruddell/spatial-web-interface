@@ -9,6 +9,8 @@ const mapActions = require("../../components.state/actions/mapActions");
 const featureActions = require("../../components.state/actions/featureActions");
 const layoutActions = require("../../components.state/actions/layoutActions");
 
+const FeatureEntity = require("../../entities/entity.feature");
+
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -41,7 +43,26 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(mapActions.fitContentToView(setId, "featureSet"));
         },
 
-        onMouseEnterContext: _.debounce((setId, isEntered) => dispatch(featureActions.flagFeatureSetHover(setId, isEntered)), 50)
+        onMouseEnterContext: _.debounce((setId, isEntered) => dispatch(featureActions.flagFeatureSetHover(setId, isEntered)), 50),
+
+        onAddFeature: () => {
+            dispatch(featureActions.clearFeatureSelectedFlags());
+
+            // Create a new entity and push it to the state.
+            var newEntity = new FeatureEntity({
+                id: 0,
+                name: "New feature",
+                featureSetId: ownProps.featureSet.id,
+                geometry: null
+            });
+
+            newEntity.isSelected = true;
+
+            dispatch(featureActions.setLocalFeature(newEntity));
+            dispatch(layoutActions.setActiveDetailTab("feature"));
+            dispatch(featureActions.flagFeatureAsSelected(newEntity.id, true));
+            dispatch(featureActions.flagIsEditingFeature(true));
+        }
     }
 }
 

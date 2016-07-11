@@ -6,8 +6,19 @@ const MapView = () => {
         position: "fixed"
     }
 
+    // The rotation control is a temporary hack due to the map container layout's
+    // interaction with the panes.
+    styleRotationControl = {
+        position: "absolute",
+        left: "84px",
+        zIndex: 1000
+    }
+
     return (
-        <div id={"map-content-root"} style={styleMapFixedContainer} className={"map"}></div>
+        <div style={styleMapFixedContainer}>
+            <div id={"map-content-root"} className={"map"}></div>
+            <div id="ol-control-rotate-custom" style={styleRotationControl}></div>
+        </div>
     );
 }
 

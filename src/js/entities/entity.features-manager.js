@@ -73,7 +73,25 @@ class FeaturesManager {
             }));
         });
 
+        // TODO: update local feature.
         return Promise.all(promises);
+    }
+
+    createRemoteFeature (feature) {
+        if (!feature) {
+            return;
+        }
+
+        remote({
+            path: 'api/features',
+            method: 'POST',
+            headers:{'Content-Type': 'application/json'},
+            entity: feature
+        }).then((response) => {
+            // Push the stored entity to the state.
+            // TODO: error codes etc.
+            this._dispatch(featureActions.setLocalFeature(new FeatureEntity(response.entity)));
+        });
     }
 }
 

@@ -90,7 +90,7 @@ const buildSelector = (map) =>
 
             remoteVectorSource.addFeatures(_.map(setFeatures, (f) => {
                 var mapFeature = new ol.Feature({
-                    geometry: geoJsonLoader.readGeometry(f.geometry)
+                    geometry: f.geometry ? geoJsonLoader.readGeometry(f.geometry) : undefined
                 });
 
                 // Provide the feature ID and data attributes to the map feature.

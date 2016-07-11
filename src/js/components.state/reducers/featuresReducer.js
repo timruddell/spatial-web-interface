@@ -9,6 +9,7 @@ var initialState = {
     isEditingFeature: false,
 
     featureSets: [],
+    // TODO: should be a member on the appropriate featureSet.
     selectedFeatureSetId: null
 }
 
@@ -31,6 +32,15 @@ const reducer = createReducer({
                 ...state.items.slice(featureIndex + 1)
             ]});
         }
+    },
+
+    [a.removeLocalFeature]: (state, featureId) => {
+        var featureIndex = _.findIndex(state.items, (f) => f.id === featureId);
+
+        return Object.assign({}, state, { items: [
+            ...state.items.slice(0, featureIndex),
+            ...state.items.slice(featureIndex + 1)
+        ]});
     },
 
     [a.setLocalFeaturesForSet]: (state, payload) => 

@@ -80,6 +80,10 @@ const buildSelector = (map, dispatch) => {
         // Get the map feature corresponding to the selected entity.
         var mapFeature = map.getMapFeatureById(selectedFeature.id);
 
+        if (!mapFeature) {
+            return;
+        }
+
         mapFeature.setStyle(isEditingFeature 
             ? buildModifyStyle(mapFeature) 
             : buildSelectStyle(mapFeature));
