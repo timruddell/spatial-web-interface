@@ -8,6 +8,11 @@ const buildSelector = (map, dispatch) => {
         var layer = map.getLayerByFeatureId(feature.getId());
         var layerStyle = layer.getStyleFunction()(feature, map.getSize());
 
+        // Default.
+        if (!layerStyle) {
+            return null;
+        }
+
         var stroke = layerStyle.getStroke();
         if (stroke) {
             stroke.setWidth(stroke.getWidth() * 2);
@@ -36,8 +41,24 @@ const buildSelector = (map, dispatch) => {
             new ol.style.Style({
                 image: verticeHandle,
                 geometry: function(feature) {
-                    var coordinates = feature.getGeometry().getCoordinates()[0];
-                    return new ol.geom.MultiPoint(coordinates);
+                    var geom = feature.getGeometry();
+                    var verticeGeom = null;
+
+                    switch (geom.getType()) {
+                        case 'Polygon':
+                            // If the geometry type is Polygon, use the first ring only.
+                            verticeGeom = new ol.geom.MultiPoint(geom.getCoordinates()[0]);
+                            break;
+
+                        case 'LineString':
+                            verticeGeom = new ol.geom.MultiPoint(geom.getCoordinates());
+                            break;
+
+                        case 'Point':
+                            verticeGeom = geom;
+                    }
+
+                    return verticeGeom;
                 }
             }),
             // Default global edit style.
