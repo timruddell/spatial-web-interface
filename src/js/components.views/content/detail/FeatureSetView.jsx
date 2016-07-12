@@ -18,7 +18,8 @@ const FeatureSetView = ({
     onToggleFeatureLabelVisible,
     onLocateFeatureSet,
 
-    onMouseEnterContext
+    onMouseEnterContext,
+    onAddFeature
 }) => {
     return (
         <div>
@@ -60,7 +61,7 @@ const FeatureSetView = ({
                         <ul className="sidebar-menu">
                             <li className="treeview active">
                                 <ul className="treeview-menu menu-open">
-                                    <li><a href="#"><i className="fa fa-plus"></i> <span>Add a feature</span></a></li>
+                                    <li onClick={ onAddFeature }><a href="#"><i className="fa fa-plus"></i> <span>Add a feature</span></a></li>
                                     <li><a href="#"><i className="fa fa-download"></i> <span>Download feature set</span></a></li>
                                     {
                                         featureSet.hasLabels 

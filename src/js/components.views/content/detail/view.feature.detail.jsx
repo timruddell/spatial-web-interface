@@ -17,7 +17,8 @@ const view = ({
 
     onEditFeature,
     onDiscardEdits,
-    onSaveEdits
+    onSaveEdits,
+    onFeatureNameUpdate
 }) => {
     return (
         <div>
@@ -29,9 +30,15 @@ const view = ({
             </span>
 
             <div className="info-box-content" style={{ marginLeft: "36px" }}>
-                <span>
-                    { entity.name }
-                </span>
+                {
+                    isEditingFeature && showDetail
+                        ? <input type="text" className="form-control" value={ entity.name } onChange={ (e) => onFeatureNameUpdate(e.target.value) } style={{ height: "22px" }} />
+                        : (
+                            <span>
+                                { entity.name }
+                            </span>
+                        )
+                }
             </div>
         </div>
         {

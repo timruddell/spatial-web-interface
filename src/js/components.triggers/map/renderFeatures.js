@@ -11,7 +11,7 @@ const parseStyles = (styleObj, labelsVisible) => {
             return null;
         }
 
-        var fill, stroke, text;
+        var fill, stroke, image, text;
 
         // Fill style.
         if (styleObj["fill"]) {
@@ -20,6 +20,10 @@ const parseStyles = (styleObj, labelsVisible) => {
 
         if (styleObj["stroke"]) {
             stroke = new ol.style.Stroke(styleObj.stroke);
+        }
+
+        if (styleObj["icon"]) {
+            image = new ol.style.Icon(styleObj.icon);
         }
 
         if (styleObj["text"] && labelsVisible) {
@@ -43,13 +47,13 @@ const parseStyles = (styleObj, labelsVisible) => {
             }
 
             text = new ol.style.Text(Object.assign({}, styleObj.text, { 
-                stroke: textStroke, 
-                fill: textFill ,
+                stroke: textStroke,
+                fill: textFill,
                 text: textValue
             }));
         }
 
-        return new ol.style.Style({ fill, stroke, text });
+        return new ol.style.Style({ fill, stroke, image, text });
     }
 }
 
@@ -90,7 +94,7 @@ const buildSelector = (map) =>
 
             remoteVectorSource.addFeatures(_.map(setFeatures, (f) => {
                 var mapFeature = new ol.Feature({
-                    geometry: geoJsonLoader.readGeometry(f.geometry)
+                    geometry: f.geometry ? geoJsonLoader.readGeometry(f.geometry) : undefined
                 });
 
                 // Provide the feature ID and data attributes to the map feature.

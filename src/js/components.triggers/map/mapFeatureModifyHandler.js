@@ -28,32 +28,35 @@ const buildSelector = (map, dispatch) => {
         if (isEditingFeature) {
             var feature = _.first(_.filter(features, (f) => f.isSelected));
 
-            if (feature) {
-                var mapFeature = map.getMapFeatureById(feature.id);
-
-                 // Build a new interaction every time.
-                var modifyInteraction = new ol.interaction.Modify({
-                    features: new ol.Collection([mapFeature])
-                });
-
-                modifyInteraction.on("modifyend", (event) => {
-                    var geoJsonLoader = new ol.format.GeoJSON({ defaultDataProjection: "EPSG:3857" });
-
-                    _.each(event.features.getArray(), (f) => {
-                        // Flag as modified if the feature was existing.
-                        if (!!f.getId()) {
-                            // Send the updated geometry to append to the state.
-                            var geometry = geoJsonLoader.writeGeometry(f.getGeometry());
-                            dispatch(featureActions.updateFeatureState(f.getId(), { geometry }));
-                        }
-                    });
-                });
-
-                mapModifyInteraction = modifyInteraction;
-                map.getInteractions().push(modifyInteraction);
-                
+            // If the feature geometry is null, then there is nothing to modify. Draw will be used instead.
+            if (!feature || feature.geometry === null) {
                 return;
             }
+            
+            var mapFeature = map.getMapFeatureById(feature.id);
+
+                // Build a new interaction every time.
+            var modifyInteraction = new ol.interaction.Modify({
+                features: new ol.Collection([mapFeature])
+            });
+
+            modifyInteraction.on("modifyend", (event) => {
+                var geoJsonLoader = new ol.format.GeoJSON({ defaultDataProjection: "EPSG:3857" });
+
+                _.each(event.features.getArray(), (f) => {
+                    // Flag as modified if the feature was existing.
+                    if (!!f.getId()) {
+                        // Send the updated geometry to append to the state.
+                        var geometry = geoJsonLoader.writeGeometry(f.getGeometry());
+                        dispatch(featureActions.updateFeatureState(f.getId(), { geometry }));
+                    }
+                });
+            });
+
+            mapModifyInteraction = modifyInteraction;
+            map.getInteractions().push(modifyInteraction);
+            
+            return;
         }
     });
 }

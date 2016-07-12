@@ -12,6 +12,11 @@ const actions = {
         feature => feature
     ),
 
+    removeLocalFeature: createAction(
+        "Remove a feature from the state",
+        featureId => featureId
+    ),
+
     setLocalFeatures: createAction(
         "Set the list of local Features against the state for use by the applicaiton",
         features => features
