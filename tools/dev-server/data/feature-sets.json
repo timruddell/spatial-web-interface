@@ -1,0 +1,50 @@
+[{
+	"id": 12,
+	"name": "Center-pivot irrigators",
+	"projectId": 1,
+	"style": "{\"icon\": {\"anchor\": [0.5, 0.5],\"anchorXUnits\": \"fraction\",\"anchorYUnits\": \"fraction\",\"color\": [0,0,0,1],\"scale\": 0.6,\"rotation\": 2,\"src\": \"app/img/icon/feature/cpi.png\"}}",
+	"renderOrder": 7,
+	"geometryType": "Point"
+}, {
+	"id": 5,
+	"name": "Active high-yield",
+	"projectId": 1,
+	"style": "{\"fill\": {\"color\": [44, 162, 95, 0.7]},\"stroke\": {\"color\": [0, 0, 0, 0.8],\"width\": 2}}",
+	"renderOrder": 2,
+	"geometryType": "Polygon"
+}, {
+	"id": 13,
+	"name": "Inlets",
+	"projectId": 1,
+	"style": "{\"icon\": {\"anchor\": [0.5, 0.5],\"anchorXUnits\": \"fraction\",\"anchorYUnits\": \"fraction\",\"color\": [0,0,0,1],\"scale\": 0.6,\"src\": \"app/img/icon/feature/inlet.png\"}}",
+	"renderOrder": 8,
+	"geometryType": "Point"
+}, {
+	"id": 7,
+	"name": "Active low-yield",
+	"projectId": 1,
+	"style": "{\"fill\": {\"color\": [153, 216, 201, 0.7]},\"stroke\": {\"color\": [0, 0, 0, 0.8],\"width\": 2}}",
+	"renderOrder": 3,
+	"geometryType": "Polygon"
+}, {
+	"id": 10,
+	"name": "Open channels",
+	"projectId": 1,
+	"style": "{\"stroke\": {\"color\": [44, 127, 184, 0.8],\"width\": 5}}",
+	"renderOrder": 5,
+	"geometryType": "LineString"
+}, {
+	"id": 8,
+	"name": "Inactive (no-yield)",
+	"projectId": 1,
+	"style": "{\"fill\": {\"color\": [229, 245, 249, 0.7]},\"stroke\": {\"color\": [0, 0, 0, 0.8],\"width\": 2}}",
+	"renderOrder": 4,
+	"geometryType": "Polygon"
+}, {
+	"id": 11,
+	"name": "Pipelines",
+	"projectId": 1,
+	"style": "{\"stroke\": {\"color\": [44, 127, 184, 0.8],\"width\": 5,\"lineDash\": [5, 15]}}",
+	"renderOrder": 6,
+	"geometryType": "LineString"
+}]

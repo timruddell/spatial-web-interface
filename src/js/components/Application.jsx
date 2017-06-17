@@ -13,18 +13,18 @@ const FeaturesManager = require("../entities/entity.features-manager");
 // Create the top-level application store for use by child components.
 var store = Redux.createStore(applicationReducer);
 
-//// TEMP DEV STATE CHANGER
-// setTimeout(() => {
-//     store.dispatch(projectActions.setSelectedProject(2));
-//     store.dispatch(mapActions.fitContentToView(2, "project"));
-//     store.dispatch(featureActions.setSelectedFeatureSet(4));
-//     store.dispatch(layoutActions.openDetailPane());
-//     store.dispatch(layoutActions.setActiveDetailTab("featureSet"));
+/// Dispatch actions at page load to start in a specific state.
+/// Currently selects and zooms to Colorado River plots demo (mock project ID 1).
+setTimeout(() => {
+    // Select the demo project.
+    store.dispatch(projectActions.setSelectedProject(1));
+    // Zoom the main map view to the extent of the project.
+    store.dispatch(mapActions.fitContentToView(1, "project"));
+    // Open the right-hand side detail pane with project info.
+    store.dispatch(layoutActions.openDetailPane());
+}, 200);
 
-// }, 200);
-
-// TODO: can we react-redux bind this even if the Provider hasn't been set up? Might need to do some more
-// nesting of sub components for this.
+// Root application component;
 class Application extends React.Component {
 
     componentDidMount () {

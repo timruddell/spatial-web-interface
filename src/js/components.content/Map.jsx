@@ -46,7 +46,7 @@ class Map extends React.Component {
             
             view: new ol.View({
                 center: ol.proj.transform([173.870, -41.151], "EPSG:4326", "EPSG:3857"),
-                zoom: 6
+                zoom: 2
             })
         });
 

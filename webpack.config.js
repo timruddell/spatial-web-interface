@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./js/components/Root.jsx",
+    entry: "./src/js/components/Root.jsx",
     output: {
         filename: "bundle.js",
         publicPath: "http://localhost:8090/js"

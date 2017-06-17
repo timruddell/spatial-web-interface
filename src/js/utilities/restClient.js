@@ -9,6 +9,6 @@ const mimeInterceptor = require('rest/interceptor/mime');
 const pathPrefixInterceptor = require('rest/interceptor/pathPrefix');
 
 var client = rest.wrap(mimeInterceptor)
-    .wrap(pathPrefixInterceptor, { prefix: 'http://localhost:61738' });
+    .wrap(pathPrefixInterceptor, { prefix: 'http://localhost:3000' });
 
 module.exports = client;
